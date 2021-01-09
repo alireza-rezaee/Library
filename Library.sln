@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.WebApp", "Library.WebApp\Library.WebApp.csproj", "{25D0FDF6-0883-418F-B690-718C5BBFD5C7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.WebApp", "src\Library.WebApp\Library.WebApp.csproj", "{25D0FDF6-0883-418F-B690-718C5BBFD5C7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{639E940C-2838-4F06-95E4-5C186B117DA7}"
 EndProject
