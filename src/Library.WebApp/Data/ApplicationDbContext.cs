@@ -57,5 +57,9 @@ namespace Mohkazv.Library.WebApp.Data
                 .WithMany(user => user.BorrowBooks)
                 .HasForeignKey(borrowBook => borrowBook.UserId);
         }
+
+        public DbSet<Mohkazv.Library.WebApp.Models.BookAuthor> BookAuthor { get; set; }
+
+        public DbSet<Mohkazv.Library.WebApp.Models.BorrowBook> BorrowBook { get; set; }
     }
 }
