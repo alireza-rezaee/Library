@@ -31,7 +31,7 @@ namespace Mohkazv.Library.WebApp.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Map many Book(s) with many Author(s)
+            // Map many Book(s) with many Author(s) in BookAuthor(s)
             modelBuilder.Entity<BookAuthor>()
                 .HasKey(bookAuthor => new { bookAuthor.BookId, bookAuthor.AuthorId });
             modelBuilder.Entity<BookAuthor>()
@@ -41,7 +41,19 @@ namespace Mohkazv.Library.WebApp.Data
             modelBuilder.Entity<BookAuthor>()
                 .HasOne(bookAuthor => bookAuthor.Author)
                 .WithMany(author => author.BookAuthors)
-                .HasForeignKey(BookAuthor => BookAuthor.AuthorId);
+                .HasForeignKey(bookAuthor => bookAuthor.AuthorId);
+
+            // Map many Book(s) with many User(s) in BorrowBook(s)
+            modelBuilder.Entity<BorrowBook>()
+                .HasKey(borrowBook => new { borrowBook.BookId, borrowBook.UserId });
+            modelBuilder.Entity<BorrowBook>()
+                .HasOne(borrowBook => borrowBook.Book)
+                .WithMany(book => book.BorrowBooks)
+                .HasForeignKey(borrowBook => borrowBook.BookId);
+            modelBuilder.Entity<BorrowBook>()
+                .HasOne(borrowBook => borrowBook.User)
+                .WithMany(user => user.BorrowBooks)
+                .HasForeignKey(borrowBook => borrowBook.UserId);
         }
     }
 }

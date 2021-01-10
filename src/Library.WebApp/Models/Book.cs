@@ -56,6 +56,8 @@ namespace Mohkazv.Library.WebApp.Models
 
         [Display(Name = "رده‌بندی دهدهی دیوئی")]
         public DeweyDecimalClassification DeweyDecimalClassification { get; set; }
+
+        public ICollection<BorrowBook> BorrowBooks { get; set; }
         #endregion
     }
 }

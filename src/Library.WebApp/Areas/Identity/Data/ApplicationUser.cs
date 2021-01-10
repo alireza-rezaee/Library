@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Mohkazv.Library.WebApp.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -41,5 +42,9 @@ namespace Mohkazv.Library.WebApp.Areas.Identity.Data
         [StringLength(100)]
         [Display(Name = "محل زندگی")]
         public string Location { get; set; }
+
+        #region Relationships
+        public ICollection<BorrowBook> BorrowBooks { get; set; }
+        #endregion
     }
 }
