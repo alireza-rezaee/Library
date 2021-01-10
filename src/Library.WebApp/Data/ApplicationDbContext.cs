@@ -32,6 +32,7 @@ namespace Mohkazv.Library.WebApp.Data
             base.OnModelCreating(modelBuilder);
 
             // Map many Book(s) with many Author(s) in BookAuthor(s)
+            modelBuilder.Entity<BookAuthor>().ToTable("BookAuthors");
             modelBuilder.Entity<BookAuthor>()
                 .HasKey(bookAuthor => new { bookAuthor.BookId, bookAuthor.AuthorId });
             modelBuilder.Entity<BookAuthor>()
@@ -44,6 +45,7 @@ namespace Mohkazv.Library.WebApp.Data
                 .HasForeignKey(bookAuthor => bookAuthor.AuthorId);
 
             // Map many Book(s) with many User(s) in BorrowBook(s)
+            modelBuilder.Entity<BorrowBook>().ToTable("BorrowBooks");
             modelBuilder.Entity<BorrowBook>()
                 .HasKey(borrowBook => new { borrowBook.BookId, borrowBook.UserId });
             modelBuilder.Entity<BorrowBook>()
