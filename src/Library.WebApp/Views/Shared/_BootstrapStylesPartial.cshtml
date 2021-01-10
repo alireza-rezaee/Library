@@ -1,0 +1,13 @@
+﻿<environment include="Development">
+    <link rel="stylesheet" href="~/lib/bootstrap/5.0.0-beta1/dist/css/bootstrap.css" />
+</environment>
+<environment exclude="Development">
+    <link rel="stylesheet"
+          href="https://unpkg.com/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+          asp-fallback-href="~/lib/bootstrap/5.0.0-beta1/dist/css/bootstrap.min.css"
+          asp-fallback-test-class="sr-only"
+          asp-fallback-test-property="position"
+          asp-fallback-test-value="absolute"
+          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous" />
+    <link rel="stylesheet" href="~/css/main.css" />
+</environment>
