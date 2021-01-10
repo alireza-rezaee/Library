@@ -1,0 +1,31 @@
+﻿@using static Mohkazv.Library.WebApp.Extensions.SessionExtensions
+@using Microsoft.AspNetCore.Http
+@using Mohkazv.Library.WebApp.TagHelpers
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    var toasts = HttpContextAccessor.HttpContext.Session.GetToasts();
+}
+@if (toasts.Any())
+{
+    <div class="toast-container position-fixed start-0 bottom-0 p-3" style="z-index: 99;">
+        @foreach (var item in toasts)
+        {
+            if (item.Type is null) item.Type = ToastType.Information;
+            if (item.Animation is null) item.Animation = true;
+            if (item.Autohide is null) item.Autohide = true;
+            if (item.Delay is null) item.Delay = 5000;
+
+            <toast message="@item.Message"
+                   type="@((ToastType)item.Type)"
+                   title="@item.Title"
+                   date-time="@item.Time"
+                   animation="@((bool)item.Animation)"
+                   autohide="@((bool)item.Autohide)"
+                   delay="@((int)item.Delay)"></toast>
+        }
+
+        <script>
+            [].slice.call(document.querySelectorAll('.toast')).forEach(toastEl => new bootstrap.Toast(toastEl).show());
+        </script>
+    </div>
+}
