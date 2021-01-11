@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Mohkazv.Library.WebApp.Areas.Identity.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using Mohkazv.Library.WebApp.Areas.Identity.Data;
+using Mohkazv.Library.WebApp.Areas.Identity.Helpers;
 
 namespace Mohkazv.Library.WebApp.Areas.Identity.Pages.Account
 {
@@ -37,14 +38,14 @@ namespace Mohkazv.Library.WebApp.Areas.Identity.Pages.Account
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{userId}'.");
+                return NotFound(Describer.UnableToLoadUser(_userManager.GetUserId(User), Language.English));
             }
 
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
             var result = await _userManager.ChangeEmailAsync(user, email, code);
             if (!result.Succeeded)
             {
-                StatusMessage = "Error changing email.";
+                StatusMessage = "در تغییر رایانامه خطایی پیش آمد.";
                 return Page();
             }
 
@@ -53,12 +54,12 @@ namespace Mohkazv.Library.WebApp.Areas.Identity.Pages.Account
             var setUserNameResult = await _userManager.SetUserNameAsync(user, email);
             if (!setUserNameResult.Succeeded)
             {
-                StatusMessage = "Error changing user name.";
+                StatusMessage = "در تغییر نام کاربری خطایی پیش آمد.";
                 return Page();
             }
 
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Thank you for confirming your email change.";
+            StatusMessage = "رایانامه شما با موفقیت تایید شد.";
             return Page();
         }
     }

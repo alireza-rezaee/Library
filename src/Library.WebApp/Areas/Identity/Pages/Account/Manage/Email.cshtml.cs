@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Mohkazv.Library.WebApp.Areas.Identity.Data;
+using Mohkazv.Library.WebApp.Services.Email;
+using Mohkazv.Library.WebApp.Areas.Identity.Helpers;
 
 namespace Mohkazv.Library.WebApp.Areas.Identity.Pages.Account.Manage
 {
@@ -18,12 +20,12 @@ namespace Mohkazv.Library.WebApp.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly IEmailSender _emailSender;
+        private readonly ISiteEmailSender _emailSender;
 
         public EmailModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IEmailSender emailSender)
+            ISiteEmailSender emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -32,6 +34,7 @@ namespace Mohkazv.Library.WebApp.Areas.Identity.Pages.Account.Manage
 
         public string Username { get; set; }
 
+        [Display(Name = "نشانی رایانامه")]
         public string Email { get; set; }
 
         public bool IsEmailConfirmed { get; set; }
@@ -46,7 +49,7 @@ namespace Mohkazv.Library.WebApp.Areas.Identity.Pages.Account.Manage
         {
             [Required]
             [EmailAddress]
-            [Display(Name = "New email")]
+            [Display(Name = "نشانی جدید رایانامه")]
             public string NewEmail { get; set; }
         }
 
@@ -68,7 +71,7 @@ namespace Mohkazv.Library.WebApp.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound(Describer.UnableToLoadUser(_userManager.GetUserId(User), Language.English));
             }
 
             await LoadAsync(user);
@@ -80,7 +83,7 @@ namespace Mohkazv.Library.WebApp.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound(Describer.UnableToLoadUser(_userManager.GetUserId(User), Language.English));
             }
 
             if (!ModelState.IsValid)
@@ -94,22 +97,23 @@ namespace Mohkazv.Library.WebApp.Areas.Identity.Pages.Account.Manage
             {
                 var userId = await _userManager.GetUserIdAsync(user);
                 var code = await _userManager.GenerateChangeEmailTokenAsync(user, Input.NewEmail);
-                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                 var callbackUrl = Url.Page(
                     "/Account/ConfirmEmailChange",
                     pageHandler: null,
                     values: new { userId = userId, email = Input.NewEmail, code = code },
                     protocol: Request.Scheme);
-                await _emailSender.SendEmailAsync(
-                    Input.NewEmail,
-                    "Confirm your email",
-                    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                await _emailSender.SendAsync(
+                    from: WebApp.Helpers.EmailTypes.NoReply,
+                    to: Input.NewEmail,
+                    subject: "تایید رایانامه",
+                    body: $"لطفاً حساب کاربری خود را با <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>کلیک روی نشانی</a> تایید کنید.",
+                    isBodyHtml: true);
 
-                StatusMessage = "Confirmation link to change email sent. Please check your email.";
+                StatusMessage = "نشانی تاییدیه به رایانامه ارسال شد. لطفاً رایانامه خود را بررسی کنید.";
                 return RedirectToPage();
             }
 
-            StatusMessage = "Your email is unchanged.";
+            StatusMessage = "رایانامه شما تغییر نکرد.";
             return RedirectToPage();
         }
 
@@ -118,7 +122,7 @@ namespace Mohkazv.Library.WebApp.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound(Describer.UnableToLoadUser(_userManager.GetUserId(User), Language.English));
             }
 
             if (!ModelState.IsValid)
@@ -136,12 +140,14 @@ namespace Mohkazv.Library.WebApp.Areas.Identity.Pages.Account.Manage
                 pageHandler: null,
                 values: new { area = "Identity", userId = userId, code = code },
                 protocol: Request.Scheme);
-            await _emailSender.SendEmailAsync(
-                email,
-                "Confirm your email",
-                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+            await _emailSender.SendAsync(
+                from: WebApp.Helpers.EmailTypes.NoReply,
+                to: Input.NewEmail,
+                subject: "تایید رایانامه",
+                body: $"لطفاً حساب کاربری خود را با <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>کلیک روی نشانی</a> تایید کنید.",
+                isBodyHtml: true);
 
-            StatusMessage = "Verification email sent. Please check your email.";
+            StatusMessage = "رایانامه تاییدیه ارسال شد. لطفاً رایانامه خود را بررسی کنید.";
             return RedirectToPage();
         }
     }

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using Mohkazv.Library.WebApp.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using Mohkazv.Library.WebApp.Areas.Identity.Data;
+using Mohkazv.Library.WebApp.Areas.Identity.Helpers;
+using Mohkazv.Library.WebApp.Helpers;
 
 namespace Mohkazv.Library.WebApp.Areas.Identity.Pages.Account.Manage
 {
@@ -14,15 +16,18 @@ namespace Mohkazv.Library.WebApp.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<DeletePersonalDataModel> _logger;
+        private readonly IFileManager _ifileManager;
 
         public DeletePersonalDataModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            ILogger<DeletePersonalDataModel> logger)
+            ILogger<DeletePersonalDataModel> logger,
+            IFileManager ifileManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _ifileManager = ifileManager;
         }
 
         [BindProperty]
@@ -31,6 +36,7 @@ namespace Mohkazv.Library.WebApp.Areas.Identity.Pages.Account.Manage
         public class InputModel
         {
             [Required]
+            [Display(Name = "گذرواژه")]
             [DataType(DataType.Password)]
             public string Password { get; set; }
         }
@@ -42,7 +48,7 @@ namespace Mohkazv.Library.WebApp.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound(Describer.UnableToLoadUser(_userManager.GetUserId(User), Language.English));
             }
 
             RequirePassword = await _userManager.HasPasswordAsync(user);
@@ -54,7 +60,7 @@ namespace Mohkazv.Library.WebApp.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound(Describer.UnableToLoadUser(_userManager.GetUserId(User), Language.English));
             }
 
             RequirePassword = await _userManager.HasPasswordAsync(user);
@@ -62,7 +68,7 @@ namespace Mohkazv.Library.WebApp.Areas.Identity.Pages.Account.Manage
             {
                 if (!await _userManager.CheckPasswordAsync(user, Input.Password))
                 {
-                    ModelState.AddModelError(string.Empty, "Incorrect password.");
+                    ModelState.AddModelError(string.Empty, "گذرواژه اشتباه است.");
                     return Page();
                 }
             }
@@ -71,12 +77,15 @@ namespace Mohkazv.Library.WebApp.Areas.Identity.Pages.Account.Manage
             var userId = await _userManager.GetUserIdAsync(user);
             if (!result.Succeeded)
             {
-                throw new InvalidOperationException($"Unexpected error occurred deleting user with ID '{userId}'.");
+                throw new InvalidOperationException($"خطای پیش بینی نشده حین حذف کاربر '{userId}' پیش آمد.");
             }
+
+            //Delete User's Profile Image
+            _ifileManager.DeleteFile(user.ProfileImagePath);
 
             await _signInManager.SignOutAsync();
 
-            _logger.LogInformation("User with ID '{UserId}' deleted themselves.", userId);
+            _logger.LogInformation($"User with ID '{userId}' deleted themselves.");
 
             return Redirect("~/");
         }

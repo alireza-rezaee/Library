@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Mohkazv.Library.WebApp.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using Mohkazv.Library.WebApp.Areas.Identity.Data;
+using Mohkazv.Library.WebApp.Areas.Identity.Helpers;
 
 namespace Mohkazv.Library.WebApp.Areas.Identity.Pages.Account.Manage
 {
@@ -45,7 +46,7 @@ namespace Mohkazv.Library.WebApp.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound(Describer.UnableToLoadUser(_userManager.GetUserId(User), Language.English));
             }
 
             HasAuthenticator = await _userManager.GetAuthenticatorKeyAsync(user) != null;
@@ -61,11 +62,11 @@ namespace Mohkazv.Library.WebApp.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound(Describer.UnableToLoadUser(_userManager.GetUserId(User), Language.English));
             }
 
             await _signInManager.ForgetTwoFactorClientAsync();
-            StatusMessage = "The current browser has been forgotten. When you login again from this browser you will be prompted for your 2fa code.";
+            StatusMessage = "مرورگر جاری فراموش شده است. زمان ورود مجدد از طریق این مرورگر مجدداً کد های بازیابی از شما درخواست می شوند.";
             return RedirectToPage();
         }
     }

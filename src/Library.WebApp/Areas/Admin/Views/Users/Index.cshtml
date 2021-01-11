@@ -1,0 +1,184 @@
+﻿@using Mohkazv.Library.WebApp.Extensions
+@using Microsoft.AspNetCore.Identity
+@using Mohkazv.Library.WebApp.Helpers
+@addTagHelper *, Mohkazv.Library.WebApp
+@model IEnumerable<Mohkazv.Library.WebApp.Areas.Identity.Data.ApplicationUser>
+@inject SignInManager<Mohkazv.Library.WebApp.Areas.Identity.Data.ApplicationUser> SignInManager
+@inject UserManager<Mohkazv.Library.WebApp.Areas.Identity.Data.ApplicationUser> UserManager
+@{
+    ViewData["Title"] = "نمایش کاربران";
+    var user = await UserManager.GetUserAsync(User);
+}
+
+@section Head {
+    <style>
+        .control-user .btn {
+            font-size: 0.9rem;
+        }
+    </style>
+}
+
+<br class="my-3" />
+<h2 class="text-end fs-4">@ViewData["Title"] </h2>
+<hr />
+<div class="search-bar">
+    <input type="text" id="search" placeholder="جستجوی کاربران (قسمتی از نام، نام خانوادگی یا نام کاربری را وارد نمایید)" class="form-control" /><div id="suggest"></div>
+</div>
+
+<hr />
+@if (!Model.Any())
+{
+    <div class="alert alert-warning text-center">هیچ کاربری در سیستم ثبت نشده است.</div>
+}
+else
+{
+    <table class="table table-hover table-bordered table-responsive text-center table-sm">
+        <thead>
+            <tr>
+                <td>ردیف</td>
+                <td>کاربر</td>
+                @if (User.IsInRole(Roles.UserDetails) || User.IsInRole(Roles.UserRolesList) || User.IsInRole(Roles.UserDelete))
+                {
+                    <td>نظارت و مدیریت کاربر</td>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @{ var i = 1;}
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="align-middle">@i.EnglishToPersian()</td>
+                    <td class="align-middle">
+                        <div class="d-flex">
+                            <div class="p-1" style="min-width: 50px;">
+                                @if (string.IsNullOrEmpty(item.ProfileImagePath))
+                                {
+                                    <img-gravatar gravatar-size="35"
+                                                  gravatar-email="@await UserManager.GetEmailAsync(user)"
+                                                  alt="تصویر @item.FirstName @item.LastName"
+                                                  title="تصویر @item.FirstName @item.LastName"
+                                                  class="rounded-circle img-fluid"></img-gravatar>
+                                }
+                                else
+                                {
+                                    <img src="@item.ProfileImagePath"
+                                         alt="تصویر @item.FirstName @item.LastName"
+                                         title="تصویر @item.FirstName @item.LastName"
+                                         class="rounded-circle img-fluid"
+                                         style="height: 35px !important; width: 35px !important;">
+                                }
+                            </div>
+                            <div class="text-end" style="font-size: 0.9rem">
+                                <span class="d-block fw-bold">@item.DisplayName</span>
+                                <span class="d-block fw-light text-muted">@item.UserName</span>
+                            </div>
+                        </div>
+                    </td>
+                    @if (User.IsInRole(Roles.UserDetails) || User.IsInRole(Roles.UserRolesList) || User.IsInRole(Roles.UserDelete))
+                    {
+                        <td class="align-middle control-user text-nowrap">
+                            @if (User.IsInRole(Roles.UserDetails))
+                            {
+                                <a asp-controller="Users" asp-action="Details" asp-route-username="@item.UserName" class="btn btn-light text-primary" title="مشاهده جزئیات نمایه @item.UserName">
+                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-eye" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.134 13.134 0 0 0 1.66 2.043C4.12 11.332 5.88 12.5 8 12.5c2.12 0 3.879-1.168 5.168-2.457A13.134 13.134 0 0 0 14.828 8a13.133 13.133 0 0 0-1.66-2.043C11.879 4.668 10.119 3.5 8 3.5c-2.12 0-3.879 1.168-5.168 2.457A13.133 13.133 0 0 0 1.172 8z" />
+                                        <path fill-rule="evenodd" d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z" />
+                                    </svg>
+                                    نمایه
+                                </a>
+                            }
+                            @if (User.IsInRole(Roles.UserRolesList))
+                            {
+                                <a asp-controller="UserRoles" asp-action="Index" asp-route-username="@item.UserName" class="btn btn-light" title="مدیریت نقش های @item.UserName">
+                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-key" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M0 8a4 4 0 0 1 7.465-2H14a.5.5 0 0 1 .354.146l1.5 1.5a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0L13 9.207l-.646.647a.5.5 0 0 1-.708 0L11 9.207l-.646.647a.5.5 0 0 1-.708 0L9 9.207l-.646.647A.5.5 0 0 1 8 10h-.535A4 4 0 0 1 0 8zm4-3a3 3 0 1 0 2.712 4.285A.5.5 0 0 1 7.163 9h.63l.853-.854a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.793-.793-1-1h-6.63a.5.5 0 0 1-.451-.285A3 3 0 0 0 4 5z" />
+                                        <path d="M4 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+                                    </svg>
+                                    نقش ها
+                                </a>
+                            }
+                            @if (User.IsInRole(Roles.UserDelete))
+                            {
+                                <button class="btn btn-light text-danger" data-bs-toggle="modal" data-bs-target="#delete" data-id="@item.Id" data-fullname="@item.FirstName @item.LastName [@item.UserName]" title="حذف حساب @item.UserName">
+                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                                        <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+                                    </svg>
+                                    حذف
+                                </button>
+                            }
+                        </td>
+                    }
+                </tr>
+                i++;
+            }
+        </tbody>
+    </table>
+
+
+    <div class="modal fade text-end" id="delete" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form asp-action="Delete">
+                    <div class="modal-header">
+                        <h5 class="modal-title">حذف کاربر</h5>
+                        <button type="button" class="btn-close me-auto ms-0" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        آیا از حذف کاربر <div class="badge rounded-pill bg-danger js-target-username"></div> اطمینان دارید؟
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-bs-dismiss="modal">انصراف</button>
+                        <button type="submit" class="btn btn-danger">حذف نهایی</button>
+                    </div>
+                    <input type="hidden" name="id" />
+                </form>
+            </div>
+        </div>
+    </div>
+
+}
+<br class="my-3" />
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('#search').on({
+                'keyup': function () {
+                    //check for minimum required length for search goes here
+                    $.ajax({
+                        method: 'get',
+                        url: '@Url.Action("Search", "Users")',
+                        data: { q: $(this).val() },
+                        success: function (d) {
+                            $('.search-bar #suggest').css('display', 'block').empty();
+                            var suggestElement = $('.search-bar #suggest');
+                            for (var i in d) {
+
+                                suggestElement
+                                    .append('<div class="suggest-item"><a href="/Users/Details/' + d[i].id + '">'
+                                        + '<img width="40" height="40" src="' + d[i].profileImagePath + '"> '
+                                        + d[i].firstName + ' ' + d[i].lastName + ' [' + d[i].userName + ']' + '</a></div>');
+                            }
+                        }
+                    });
+                }
+                , 'focusout': function () {
+                    $('.search-bar #suggest').slideUp(function () {
+                        $(this).empty();
+                    });
+                }
+            });
+        });
+
+        $("#delete").on("show.bs.modal", function (e) {
+            var user = $(e.relatedTarget);
+            $(this).find('.js-target-username').text(user.data('fullname'));
+            $(this).find('input[name=id]').val(user.data('id'));
+        });
+
+    </script>
+
+
+
+}

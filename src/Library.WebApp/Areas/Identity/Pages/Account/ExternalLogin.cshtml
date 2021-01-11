@@ -1,29 +1,29 @@
 ﻿@page
 @model ExternalLoginModel
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "عضویت";
 }
 
 <h1>@ViewData["Title"]</h1>
-<h4 id="external-login-title">Associate your @Model.ProviderDisplayName account.</h4>
+<hr />
+<h4>اتصال حساب کاربری به @Model.LoginProvider</h4>
 <hr />
 
-<p id="external-login-description" class="text-info">
-    You've successfully authenticated with <strong>@Model.ProviderDisplayName</strong>.
-    Please enter an email address for this site below and click the Register button to finish
-    logging in.
+<p class="text-info">
+    هویت شما از طریق <strong>@Model.LoginProvider</strong> احراز شد.
+    لطفاً نشانی رایانامه خود را وارد کنید و در نهایت بر روی عضویت کلیک کنید.
 </p>
 
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-12 col-md-6">
         <form asp-page-handler="Confirmation" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="mb-3">
                 <label asp-for="Input.Email"></label>
                 <input asp-for="Input.Email" class="form-control" />
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
-            <button type="submit" class="btn btn-primary">Register</button>
+            <button type="submit" class="btn btn-primary">عضویت</button>
         </form>
     </div>
 </div>

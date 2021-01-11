@@ -22,7 +22,7 @@ namespace Mohkazv.Library.WebApp.Controllers
         // GET: BookAuthors
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.BookAuthor.Include(b => b.Author).Include(b => b.Book);
+            var applicationDbContext = _context.BookAuthors.Include(b => b.Author).Include(b => b.Book);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -34,7 +34,7 @@ namespace Mohkazv.Library.WebApp.Controllers
                 return NotFound();
             }
 
-            var bookAuthor = await _context.BookAuthor
+            var bookAuthor = await _context.BookAuthors
                 .Include(b => b.Author)
                 .Include(b => b.Book)
                 .FirstOrDefaultAsync(m => m.BookId == id);
@@ -80,7 +80,7 @@ namespace Mohkazv.Library.WebApp.Controllers
                 return NotFound();
             }
 
-            var bookAuthor = await _context.BookAuthor.FindAsync(id);
+            var bookAuthor = await _context.BookAuthors.FindAsync(id);
             if (bookAuthor == null)
             {
                 return NotFound();
@@ -135,7 +135,7 @@ namespace Mohkazv.Library.WebApp.Controllers
                 return NotFound();
             }
 
-            var bookAuthor = await _context.BookAuthor
+            var bookAuthor = await _context.BookAuthors
                 .Include(b => b.Author)
                 .Include(b => b.Book)
                 .FirstOrDefaultAsync(m => m.BookId == id);
@@ -152,15 +152,15 @@ namespace Mohkazv.Library.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var bookAuthor = await _context.BookAuthor.FindAsync(id);
-            _context.BookAuthor.Remove(bookAuthor);
+            var bookAuthor = await _context.BookAuthors.FindAsync(id);
+            _context.BookAuthors.Remove(bookAuthor);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool BookAuthorExists(int id)
         {
-            return _context.BookAuthor.Any(e => e.BookId == id);
+            return _context.BookAuthors.Any(e => e.BookId == id);
         }
     }
 }

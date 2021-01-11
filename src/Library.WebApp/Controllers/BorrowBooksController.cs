@@ -22,7 +22,7 @@ namespace Mohkazv.Library.WebApp.Controllers
         // GET: BorrowBooks
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.BorrowBook.Include(b => b.Book).Include(b => b.User);
+            var applicationDbContext = _context.BorrowBooks.Include(b => b.Book).Include(b => b.User);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -34,7 +34,7 @@ namespace Mohkazv.Library.WebApp.Controllers
                 return NotFound();
             }
 
-            var borrowBook = await _context.BorrowBook
+            var borrowBook = await _context.BorrowBooks
                 .Include(b => b.Book)
                 .Include(b => b.User)
                 .FirstOrDefaultAsync(m => m.BookId == id);
@@ -80,7 +80,7 @@ namespace Mohkazv.Library.WebApp.Controllers
                 return NotFound();
             }
 
-            var borrowBook = await _context.BorrowBook.FindAsync(id);
+            var borrowBook = await _context.BorrowBooks.FindAsync(id);
             if (borrowBook == null)
             {
                 return NotFound();
@@ -135,7 +135,7 @@ namespace Mohkazv.Library.WebApp.Controllers
                 return NotFound();
             }
 
-            var borrowBook = await _context.BorrowBook
+            var borrowBook = await _context.BorrowBooks
                 .Include(b => b.Book)
                 .Include(b => b.User)
                 .FirstOrDefaultAsync(m => m.BookId == id);
@@ -152,15 +152,15 @@ namespace Mohkazv.Library.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var borrowBook = await _context.BorrowBook.FindAsync(id);
-            _context.BorrowBook.Remove(borrowBook);
+            var borrowBook = await _context.BorrowBooks.FindAsync(id);
+            _context.BorrowBooks.Remove(borrowBook);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool BorrowBookExists(int id)
         {
-            return _context.BorrowBook.Any(e => e.BookId == id);
+            return _context.BorrowBooks.Any(e => e.BookId == id);
         }
     }
 }

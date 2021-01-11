@@ -1,4 +1,12 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿const englishNumbersToPersian = s => String(s).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
 
-// Write your JavaScript code.
+$(document).ready(function () {
+    $('<div class="mt-5"></div>').css("height", $('#footer').outerHeight()).appendTo('body>.wrapper');
+    $('.js-tooltip').tooltip();
+    $('.js-gotop').click(function () {
+        $('html, body').animate({ scrollTop: 0 });
+    });
+    $('#js-nav-shortcuts-trigger').click(function () {
+        $(this).siblings('#js-nav-shortcuts').toggleClass('open').hide().fadeIn();
+    });
+});

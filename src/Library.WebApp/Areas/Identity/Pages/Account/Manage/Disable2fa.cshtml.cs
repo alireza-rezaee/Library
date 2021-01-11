@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Mohkazv.Library.WebApp.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using Mohkazv.Library.WebApp.Areas.Identity.Data;
+using Mohkazv.Library.WebApp.Areas.Identity.Helpers;
 
 namespace Mohkazv.Library.WebApp.Areas.Identity.Pages.Account.Manage
 {
@@ -31,12 +32,12 @@ namespace Mohkazv.Library.WebApp.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound(Describer.UnableToLoadUser(_userManager.GetUserId(User), Language.English));
             }
 
             if (!await _userManager.GetTwoFactorEnabledAsync(user))
             {
-                throw new InvalidOperationException($"Cannot disable 2FA for user with ID '{_userManager.GetUserId(User)}' as it's not currently enabled.");
+                throw new InvalidOperationException($"غیرفعال سازی احراز هویت دو مرحله ای برای کاربر یا شناسه '{_userManager.GetUserId(User)}' ممکن نبود. چرا که اینک احراز هویت دو مرحله ای برای ایشان فعال نیست.");
             }
 
             return Page();
@@ -47,17 +48,17 @@ namespace Mohkazv.Library.WebApp.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound(Describer.UnableToLoadUser(_userManager.GetUserId(User), Language.English));
             }
 
             var disable2faResult = await _userManager.SetTwoFactorEnabledAsync(user, false);
             if (!disable2faResult.Succeeded)
             {
-                throw new InvalidOperationException($"Unexpected error occurred disabling 2FA for user with ID '{_userManager.GetUserId(User)}'.");
+                throw new InvalidOperationException($"مواجهه با خطای پیش بینی نشده در حین غیرفعال سازی احراز هویت دو مرحله ای برای کاربر با شناسه '{_userManager.GetUserId(User)}'.");
             }
 
-            _logger.LogInformation("User with ID '{UserId}' has disabled 2fa.", _userManager.GetUserId(User));
-            StatusMessage = "2fa has been disabled. You can reenable 2fa when you setup an authenticator app";
+            _logger.LogInformation($"احراز هویت دو مرحله ای برای کاربر با شناسه '{_userManager.GetUserId(User)}' غیر فعال است.");
+            StatusMessage = "احراز هویت دومرحله ای غیرفعال شد. شما میتوانید با تنظیم مجدد اقدام به فعال سازی دوباره کنید.";
             return RedirectToPage("./TwoFactorAuthentication");
         }
     }

@@ -1,24 +1,20 @@
 ﻿@{
-    if (ViewData.TryGetValue("ParentLayout", out var parentLayout))
-    {
-        Layout = (string)parentLayout;
-    }
-    else
-    {
-        Layout = "/Areas/Identity/Pages/_Layout.cshtml";
-    }
+    Layout = "/Views/Shared/_ContainerLayout.cshtml";
+}
+@section Head {
+    @RenderSection("Head", required: false)
 }
 
-<h2>Manage your account</h2>
+<h1>مدیریت حساب</h1>
 
 <div>
-    <h4>Change your account settings</h4>
+    <h4>تغییر تنظیمات حساب کاربری</h4>
     <hr />
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-12 col-md-3">
             <partial name="_ManageNav" />
         </div>
-        <div class="col-md-9">
+        <div class="col-12 col-md-9">
             @RenderBody()
         </div>
     </div>

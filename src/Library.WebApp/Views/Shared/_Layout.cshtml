@@ -1,49 +1,62 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="fa">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Mohkazv.Library.WebApp</title>
+    <title>@Html.Raw((string)ViewData["Title"])</title>
+    <meta name="title" content="@Html.Raw((string)ViewData["Title"])">
+    @RenderSection("Meta", required: false)
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="msapplication-TileColor" content="#ffc40d">
+    <meta name="theme-color" content="#ffffff">
     <partial name="_BootstrapStylesPartial" />
-    <link rel="stylesheet" href="~/css/site.css" />
+    <environment include="Development">
+        <link rel="stylesheet" href="~/css/main.css" asp-append-version="true" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="~/css/main.css" />
+    </environment>
+    @RenderSection("Head", required: false)
+    <style>
+    </style>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Mohkazv.Library.WebApp</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                    <partial name="_LoginPartial" />
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
+    <div class="wrapper position-relative mnh-100vh">
+        @await Component.InvokeAsync("HeaderFooter", new { page = "HeadCover" })
+        <div></div>
         <div class="container">
-            &copy; 2021 - Mohkazv.Library.WebApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            @RenderBody()
         </div>
-    </footer>
+        <div></div>
+        @await Component.InvokeAsync("HeaderFooter", new { page = "FootCover" })
+    </div>
     <partial name="_jQueryScriptsPartial" />
     <partial name="_BootstrapScriptsPartial" />
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    <environment include="Development">
+        <script src="~/lib/timeago/1.6.7/jquery.timeago.js"></script>
+        <script src="~/lib/timeago/1.6.7/locales/jquery.timeago.fa.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="https://unpkg.com/timeago@1.6.7/jquery.timeago.js"
+                asp-fallback-src="~/lib/timeago/1.6.7/jquery.timeago.js"
+                asp-fallback-test="window.jQuery & jQuery.timeago"
+                integrity="sha384-GsksDHaN27nM9MG1NsV9IPECsWOIts+Wpq92hznPS4KNEQeyOa5ChwoOJSfCbG+2" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/timeago@1.6.7/locales/jquery.timeago.fa.js"
+                asp-fallback-src="~/lib/timeago/1.6.7/locales/jquery.timeago.fa.js"
+                asp-fallback-test="jQuery.timeago"
+                integrity="sha384-KoRLLuB9R0fWSnmmIjid3KBcgtNESylDiSD14GIgfTEmkMvswToDuuHpFGu19aCr" crossorigin="anonymous"></script>
+        <script src="~/js/site.min.js"></script>
+    </environment>
+    <partial name="_ToastsPartial" />
+    <script>
+        jQuery(document).ready(function () {
+            jQuery("time.timeago").timeago();
+        });
+    </script>
+    @RenderSection("Scripts", required: false)
 </body>
 </html>
