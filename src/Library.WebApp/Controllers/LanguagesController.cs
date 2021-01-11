@@ -26,7 +26,7 @@ namespace Mohkazv.Library.WebApp.Controllers
         }
 
         // GET: Languages/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(string id)
         {
             if (id == null)
             {
@@ -34,7 +34,7 @@ namespace Mohkazv.Library.WebApp.Controllers
             }
 
             var language = await _context.Languages
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Name == id);
             if (language == null)
             {
                 return NotFound();
@@ -54,7 +54,7 @@ namespace Mohkazv.Library.WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Language language)
+        public async Task<IActionResult> Create([Bind("Name")] Language language)
         {
             if (ModelState.IsValid)
             {
@@ -66,7 +66,7 @@ namespace Mohkazv.Library.WebApp.Controllers
         }
 
         // GET: Languages/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
             {
@@ -86,9 +86,9 @@ namespace Mohkazv.Library.WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Language language)
+        public async Task<IActionResult> Edit(string id, [Bind("Name")] Language language)
         {
-            if (id != language.Id)
+            if (id != language.Name)
             {
                 return NotFound();
             }
@@ -102,7 +102,7 @@ namespace Mohkazv.Library.WebApp.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!LanguageExists(language.Id))
+                    if (!LanguageExists(language.Name))
                     {
                         return NotFound();
                     }
@@ -117,7 +117,7 @@ namespace Mohkazv.Library.WebApp.Controllers
         }
 
         // GET: Languages/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
             {
@@ -125,7 +125,7 @@ namespace Mohkazv.Library.WebApp.Controllers
             }
 
             var language = await _context.Languages
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Name == id);
             if (language == null)
             {
                 return NotFound();
@@ -137,7 +137,7 @@ namespace Mohkazv.Library.WebApp.Controllers
         // POST: Languages/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var language = await _context.Languages.FindAsync(id);
             _context.Languages.Remove(language);
@@ -145,9 +145,9 @@ namespace Mohkazv.Library.WebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool LanguageExists(int id)
+        private bool LanguageExists(string id)
         {
-            return _context.Languages.Any(e => e.Id == id);
+            return _context.Languages.Any(e => e.Name == id);
         }
     }
 }

@@ -37,6 +37,12 @@
     <None Update="Data\SqlQueries\20210111113638_InsertDefaultPersonalizations\InsertDefaultPersonalizations_Up.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Data\SqlQueries\20210111175829_InsertDefaultLanguages\InsertDefaultLanguages_Down.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\SqlQueries\20210111175829_InsertDefaultLanguages\InsertDefaultLanguages_Up.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

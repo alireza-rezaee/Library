@@ -52,7 +52,7 @@ namespace Mohkazv.Library.WebApp.Controllers
         public IActionResult Create()
         {
             ViewData["DdcId"] = new SelectList(_context.DeweyDecimalClassifications, "Id", "Id");
-            ViewData["LanguageId"] = new SelectList(_context.Languages, "Id", "Name");
+            ViewData["LanguageName"] = new SelectList(_context.Languages, "Name", "Name");
             ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Title");
             ViewData["TypeId"] = new SelectList(_context.Types, "Id", "Title");
             return View();
@@ -63,7 +63,7 @@ namespace Mohkazv.Library.WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Isbn,Name,Description,CoverPath,PublishInformation,TypeId,LanguageId,PublisherId,DdcId")] Book book)
+        public async Task<IActionResult> Create([Bind("Id,Isbn,Name,Description,CoverPath,PublishInformation,TypeId,LanguageName,PublisherId,DdcId")] Book book)
         {
             if (ModelState.IsValid)
             {
@@ -72,7 +72,7 @@ namespace Mohkazv.Library.WebApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["DdcId"] = new SelectList(_context.DeweyDecimalClassifications, "Id", "Id", book.DdcId);
-            ViewData["LanguageId"] = new SelectList(_context.Languages, "Id", "Name", book.LanguageId);
+            ViewData["LanguageName"] = new SelectList(_context.Languages, "Name", "Name", book.LanguageName);
             ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Title", book.PublisherId);
             ViewData["TypeId"] = new SelectList(_context.Types, "Id", "Title", book.TypeId);
             return View(book);
@@ -92,7 +92,7 @@ namespace Mohkazv.Library.WebApp.Controllers
                 return NotFound();
             }
             ViewData["DdcId"] = new SelectList(_context.DeweyDecimalClassifications, "Id", "Id", book.DdcId);
-            ViewData["LanguageId"] = new SelectList(_context.Languages, "Id", "Name", book.LanguageId);
+            ViewData["LanguageName"] = new SelectList(_context.Languages, "Name", "Name", book.LanguageName);
             ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Title", book.PublisherId);
             ViewData["TypeId"] = new SelectList(_context.Types, "Id", "Title", book.TypeId);
             return View(book);
@@ -103,7 +103,7 @@ namespace Mohkazv.Library.WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Isbn,Name,Description,CoverPath,PublishInformation,TypeId,LanguageId,PublisherId,DdcId")] Book book)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Isbn,Name,Description,CoverPath,PublishInformation,TypeId,LanguageName,PublisherId,DdcId")] Book book)
         {
             if (id != book.Id)
             {
@@ -131,7 +131,7 @@ namespace Mohkazv.Library.WebApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["DdcId"] = new SelectList(_context.DeweyDecimalClassifications, "Id", "Id", book.DdcId);
-            ViewData["LanguageId"] = new SelectList(_context.Languages, "Id", "Name", book.LanguageId);
+            ViewData["LanguageName"] = new SelectList(_context.Languages, "Name", "Name", book.LanguageName);
             ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Title", book.PublisherId);
             ViewData["TypeId"] = new SelectList(_context.Types, "Id", "Title", book.TypeId);
             return View(book);

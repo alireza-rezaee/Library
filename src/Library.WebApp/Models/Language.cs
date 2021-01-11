@@ -8,8 +8,7 @@ namespace Mohkazv.Library.WebApp.Models
 {
     public class Language
     {
-        public int Id { get; set; }
-
+        [Key]
         [Required(ErrorMessage = "وارد کردن {0} زبان الزامی است.")]
         [MaxLength(50, ErrorMessage = "{0} زبان تا سقف {1} کاراکتر طول دارد.")]
         [Display(Name = "نام")]

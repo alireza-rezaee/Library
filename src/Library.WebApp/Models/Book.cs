@@ -33,7 +33,7 @@ namespace Mohkazv.Library.WebApp.Models
         public int? TypeId { get; set; }
 
         [ForeignKey(nameof(Language))]
-        public int? LanguageId { get; set; }
+        public string LanguageName { get; set; }
 
         [ForeignKey(nameof(Publisher))]
         public int? PublisherId { get; set; }
