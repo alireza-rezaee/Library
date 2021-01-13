@@ -4,6 +4,7 @@
     <TargetFramework>net5.0</TargetFramework>
 	<RootNamespace>Mohkazv.Library.WebApp</RootNamespace>
     <UserSecretsId>aspnet-Mohkazv.Library.WebApp-5D158E1E-CDE2-4937-B540-BB017A9E5027</UserSecretsId>
+    <AssemblyName>Mohkazv.Library.WebApp</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
