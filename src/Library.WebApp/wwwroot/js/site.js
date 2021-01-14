@@ -10,3 +10,18 @@ $(document).ready(function () {
         $(this).siblings('#js-nav-shortcuts').toggleClass('open').hide().fadeIn();
     });
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    let historyBackUrl = document.referrer;
+    document.querySelectorAll('.js-history-back').forEach(function (El) {
+        if (historyBackUrl) {
+            El.setAttribute('href', historyBackUrl);
+            El.addEventListener('click', (e) => { window.history.go(-1); e.preventDefault(); return false; });
+            El.innerHTML = '<i class="bi bi-arrow-right"></i> بازگشت';
+        }
+        else {
+            El.setAttribute('href', '/');
+            El.innerHTML = '<i class="bi bi-house"></i> بازگشت به خانه';
+        }
+    });
+});

@@ -27,7 +27,7 @@
     <div class="wrapper position-relative mnh-100vh">
         @await Component.InvokeAsync("HeaderFooter", new { page = "HeadCover" })
         <div></div>
-        <div class="container">
+        <div class="container mt-3">
             @RenderBody()
         </div>
         <div></div>
@@ -52,11 +52,11 @@
         <script src="~/js/site.min.js"></script>
     </environment>
     <partial name="_ToastsPartial" />
-    <script>
+    @*<script>
         jQuery(document).ready(function () {
             jQuery("time.timeago").timeago();
         });
-    </script>
+    </script>*@
     @RenderSection("Scripts", required: false)
 </body>
 </html>

@@ -14,25 +14,16 @@ namespace Mohkazv.Library.WebApp.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        public BooksController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+        public BooksController(ApplicationDbContext context) => _context = context;
 
         // GET: Books
         public async Task<IActionResult> Index()
-        {
-            var applicationDbContext = _context.Books.Include(b => b.DeweyDecimalClassification).Include(b => b.Language).Include(b => b.Publisher).Include(b => b.Type);
-            return View(await applicationDbContext.ToListAsync());
-        }
+            => View(await _context.Books.Include(b => b.DeweyDecimalClassification).Include(b => b.Language).Include(b => b.Publisher).Include(b => b.Type).ToListAsync());
 
         // GET: Books/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var book = await _context.Books
                 .Include(b => b.DeweyDecimalClassification)
@@ -40,10 +31,8 @@ namespace Mohkazv.Library.WebApp.Controllers
                 .Include(b => b.Publisher)
                 .Include(b => b.Type)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (book == null)
-            {
-                return NotFound();
-            }
+
+            if (book == null) return NotFound();
 
             return View(book);
         }
