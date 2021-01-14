@@ -1,83 +1,68 @@
-﻿@model IEnumerable<Mohkazv.Library.WebApp.Models.Book>
+﻿@using Mohkazv.Library.WebApp.Extensions
+@model IEnumerable<Mohkazv.Library.WebApp.Models.Book>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "کتاب‌ها";
 }
 
-<h1>Index</h1>
+<h1>@ViewData["Title"]</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a href="#" class="btn btn-light border my-2 js-history-back">
+        <i class="bi bi-arrow-right"></i>
+        بازگشت
+    </a>
+    <a asp-controller="Books" asp-action="Create" class="btn btn-primary">افزودن کتاب جدید</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Isbn)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CoverPath)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PublishInformation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Type)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Language)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Publisher)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DeweyDecimalClassification)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Isbn)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CoverPath)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PublishInformation)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Type.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Language.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Publisher.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DeweyDecimalClassification.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover table-bordered">
+        <thead>
+            <tr>
+                <th style="width: 35px;">ردیف</th>
+                <th style="width: 80px;">
+                    @Html.DisplayNameFor(model => model.CoverPath)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Publisher)
+                </th>
+                <th>عملیات‌ها</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var count = Model.Count();
+                for (var i = 0; i < count; i++)
+                {
+                    var item = Model.ElementAt(i);
+                    <tr>
+                        <td class="align-middle" style="width: 35px;">@((i+1).EnglishToPersian())</td>
+                        <td class="text-center align-middle" style="width: 50px;">
+                            <img src="@item.CoverPath" alt="تصویر @item.Name" class="img-fluid" style="height: 150px;" />
+                        </td>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.Publisher.Title)
+                        </td>
+                        <td class="align-middle">
+                            <a asp-controller="Books" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-success lh-1" style="font-size:0 !important;">
+                                <i class="bi bi-pen fs-6"></i>
+                            </a>
+                            <a asp-controller="Books" asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-secondary lh-1" style="font-size:0 !important;">
+                                <i class="bi bi-journal fs-6"></i>
+                            </a>
+                            <a asp-controller="Books" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger lh-1" style="font-size:0 !important;">
+                                <i class="bi bi-trash fs-6"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

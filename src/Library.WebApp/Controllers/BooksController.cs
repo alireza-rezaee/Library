@@ -52,7 +52,7 @@ namespace Mohkazv.Library.WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Isbn,Name,Description,CoverPath,PublishInformation,TypeId,LanguageName,PublisherId,DdcId")] Book book)
+        public async Task<IActionResult> Create([Bind("Id,Isbn,Name,Description,CoverPath,PublishInformation,TypeId,LanguageId,PublisherId,DdcId")] Book book)
         {
             if (ModelState.IsValid)
             {
@@ -92,7 +92,7 @@ namespace Mohkazv.Library.WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Isbn,Name,Description,CoverPath,PublishInformation,TypeId,LanguageName,PublisherId,DdcId")] Book book)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Isbn,Name,Description,CoverPath,PublishInformation,TypeId,LanguageId,PublisherId,DdcId")] Book book)
         {
             if (id != book.Id)
             {

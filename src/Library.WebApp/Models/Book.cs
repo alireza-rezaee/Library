@@ -21,7 +21,7 @@ namespace Mohkazv.Library.WebApp.Models
         [Display(Name = "توضیحات")]
         public string Description { get; set; }
 
-        [Display(Name = "نشانی تصویر جلد")]
+        [Display(Name = "تصویر")]
         [MaxLength(300, ErrorMessage = "{0} کتاب تا سقف {1} کاراکتر طول دارد.")]
         public string CoverPath { get; set; }
 
@@ -29,15 +29,19 @@ namespace Mohkazv.Library.WebApp.Models
         [Display(Name = "مشخصات نشر")]
         public string PublishInformation { get; set; }
 
+        [Display(Name = "نوع")]
         [ForeignKey(nameof(Type))]
         public int? TypeId { get; set; }
 
+        [Display(Name = "زبان")]
         [ForeignKey(nameof(Language))]
         public int LanguageId { get; set; }
 
+        [Display(Name = "ناشر")]
         [ForeignKey(nameof(Publisher))]
         public int? PublisherId { get; set; }
 
+        [Display(Name = "رده‌بندی دیوئی")]
         [ForeignKey(nameof(DeweyDecimalClassification))]
         public string DdcId { get; set; }
 

@@ -544,3 +544,11 @@ html {
         float: right;
         margin-right: -1.5em;
     }
+
+
+/**/
+
+.form-floating label {
+    left: unset;
+    right: 0;
+}

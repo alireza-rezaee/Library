@@ -7,7 +7,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-controller="Authors" asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="mb-2">
                 <label asp-for="FirstName" class="control-label"></label>
@@ -23,6 +23,9 @@
                 <a href="#" class="btn btn-light border my-2 js-history-back">
                     <i class="bi bi-arrow-right"></i>
                     بازگشت
+                </a>
+                <a asp-controller="Authors" asp-action="Index" class="btn btn-light border my-2">
+                    <i class="bi bi-list"></i>
                 </a>
                 <button type="submit" class="btn btn-primary">افزودن</button>
             </div>
