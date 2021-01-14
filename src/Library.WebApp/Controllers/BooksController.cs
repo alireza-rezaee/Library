@@ -41,7 +41,7 @@ namespace Mohkazv.Library.WebApp.Controllers
         public IActionResult Create()
         {
             ViewData["DdcId"] = new SelectList(_context.DeweyDecimalClassifications, "Id", "Id");
-            ViewData["LanguageName"] = new SelectList(_context.Languages, "Name", "Name");
+            ViewData["LanguageId"] = new SelectList(_context.Languages, "Id", "Name");
             ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Title");
             ViewData["TypeId"] = new SelectList(_context.Types, "Id", "Title");
             return View();
@@ -61,7 +61,7 @@ namespace Mohkazv.Library.WebApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["DdcId"] = new SelectList(_context.DeweyDecimalClassifications, "Id", "Id", book.DdcId);
-            ViewData["LanguageName"] = new SelectList(_context.Languages, "Name", "Name", book.LanguageName);
+            ViewData["LanguageId"] = new SelectList(_context.Languages, "Id", "Name", book.LanguageId);
             ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Title", book.PublisherId);
             ViewData["TypeId"] = new SelectList(_context.Types, "Id", "Title", book.TypeId);
             return View(book);
@@ -81,7 +81,7 @@ namespace Mohkazv.Library.WebApp.Controllers
                 return NotFound();
             }
             ViewData["DdcId"] = new SelectList(_context.DeweyDecimalClassifications, "Id", "Id", book.DdcId);
-            ViewData["LanguageName"] = new SelectList(_context.Languages, "Name", "Name", book.LanguageName);
+            ViewData["LanguageId"] = new SelectList(_context.Languages, "Id", "Name", book.LanguageId);
             ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Title", book.PublisherId);
             ViewData["TypeId"] = new SelectList(_context.Types, "Id", "Title", book.TypeId);
             return View(book);
@@ -120,7 +120,7 @@ namespace Mohkazv.Library.WebApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["DdcId"] = new SelectList(_context.DeweyDecimalClassifications, "Id", "Id", book.DdcId);
-            ViewData["LanguageName"] = new SelectList(_context.Languages, "Name", "Name", book.LanguageName);
+            ViewData["LanguageId"] = new SelectList(_context.Languages, "Id", "Name", book.LanguageId);
             ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Title", book.PublisherId);
             ViewData["TypeId"] = new SelectList(_context.Types, "Id", "Title", book.TypeId);
             return View(book);

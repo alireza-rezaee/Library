@@ -1,29 +1,51 @@
-﻿@model IEnumerable<Mohkazv.Library.WebApp.Models.Language>
+﻿@using Mohkazv.Library.WebApp.Extensions
+@model IEnumerable<Mohkazv.Library.WebApp.Models.Language>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "فهرست زبان‌ها";
 }
 
-<h1>Index</h1>
+<h1>@ViewData["Title"]</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a href="#" class="btn btn-light border my-2 js-history-back">
+        <i class="bi bi-arrow-right"></i>
+        بازگشت
+    </a>
+    <a asp-controller="Languages" asp-action="Create" class="btn btn-primary">افزودن زبان جدید</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Name">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Name">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Name">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover table-bordered">
+        <thead>
+            <tr>
+                <th style="width: 35px;">ردیف</th>
+                <th>نام زبان</th>
+                <th class="text-muted small">عملیات‌ها</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int count = Model.Count();
+                for (var i = 0; i < count; i++)
+                {
+                    var item = Model.ElementAt(i);
+                    <tr>
+                        <td class="text-center" style="width: 35px;">@((i+1).EnglishToPersian())</td>
+                        <td>
+                            @item.Name
+                        </td>
+                        <td>
+                            <a asp-controller="Languages" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-success lh-1" style="font-size:0 !important;">
+                                <i class="bi bi-pen fs-6"></i>
+                            </a>
+                            <a asp-controller="Languages" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger lh-1" style="font-size:0 !important;">
+                                <i class="bi bi-trash fs-6"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
