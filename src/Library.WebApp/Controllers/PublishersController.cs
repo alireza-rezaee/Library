@@ -10,6 +10,7 @@ using Mohkazv.Library.WebApp.Models;
 
 namespace Mohkazv.Library.WebApp.Controllers
 {
+    [Route("publishers")]
     public class PublishersController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -19,31 +20,13 @@ namespace Mohkazv.Library.WebApp.Controllers
             _context = context;
         }
 
-        // GET: Publishers
+        [HttpGet("")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Publishers.ToListAsync());
         }
 
-        // GET: Publishers/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var publisher = await _context.Publishers
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (publisher == null)
-            {
-                return NotFound();
-            }
-
-            return View(publisher);
-        }
-
-        // GET: Publishers/Create
+        [HttpGet("create")]
         public IActionResult Create()
         {
             return View();
@@ -52,7 +35,7 @@ namespace Mohkazv.Library.WebApp.Controllers
         // POST: Publishers/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost("create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title")] Publisher publisher)
         {
@@ -65,7 +48,7 @@ namespace Mohkazv.Library.WebApp.Controllers
             return View(publisher);
         }
 
-        // GET: Publishers/Edit/5
+        [HttpGet("edit/{id}")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -84,7 +67,7 @@ namespace Mohkazv.Library.WebApp.Controllers
         // POST: Publishers/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost("edit/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title")] Publisher publisher)
         {
@@ -116,7 +99,7 @@ namespace Mohkazv.Library.WebApp.Controllers
             return View(publisher);
         }
 
-        // GET: Publishers/Delete/5
+        [HttpGet("delete/{id}")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -135,7 +118,7 @@ namespace Mohkazv.Library.WebApp.Controllers
         }
 
         // POST: Publishers/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost("delete/{id}"), ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
