@@ -10,22 +10,23 @@ using Mohkazv.Library.WebApp.Models;
 
 namespace Mohkazv.Library.WebApp.Controllers
 {
+    [Route("authors")]
     public class AuthorsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
         public AuthorsController(ApplicationDbContext context) => _context = context;
 
-        // GET: Authors
+        [HttpGet("")]
         public async Task<IActionResult> Index() => View(await _context.Authors.ToListAsync());
 
-        // GET: Authors/Create
+        [HttpGet("create")]
         public IActionResult Create() => View();
 
         // POST: Authors/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost("create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,FirstName,LastName")] Author author)
         {
@@ -38,7 +39,7 @@ namespace Mohkazv.Library.WebApp.Controllers
             return View(author);
         }
 
-        // GET: Authors/Edit/5
+        [HttpGet("edit/{id}")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -54,7 +55,7 @@ namespace Mohkazv.Library.WebApp.Controllers
             return View(author);
         }
 
-        // POST: Authors/Edit/5
+        [HttpPost("edit/{id}")]
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -89,7 +90,7 @@ namespace Mohkazv.Library.WebApp.Controllers
             return View(author);
         }
 
-        // GET: Authors/Delete/5
+        [HttpGet("delete/{id}")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -108,7 +109,7 @@ namespace Mohkazv.Library.WebApp.Controllers
         }
 
         // POST: Authors/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost("delete/{id}"), ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

@@ -10,17 +10,18 @@ using Mohkazv.Library.WebApp.Models;
 
 namespace Mohkazv.Library.WebApp.Controllers
 {
+    [Route("books")]
     public class BooksController : Controller
     {
         private readonly ApplicationDbContext _context;
 
         public BooksController(ApplicationDbContext context) => _context = context;
 
-        // GET: Books
+        [HttpGet("")]
         public async Task<IActionResult> Index()
             => View(await _context.Books.Include(b => b.DeweyDecimalClassification).Include(b => b.Language).Include(b => b.Publisher).Include(b => b.Type).ToListAsync());
 
-        // GET: Books/Details/5
+        [HttpGet("details/{id}")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
@@ -37,7 +38,7 @@ namespace Mohkazv.Library.WebApp.Controllers
             return View(book);
         }
 
-        // GET: Books/Create
+        [HttpGet("create")]
         public IActionResult Create()
         {
             ViewData["DdcId"] = new SelectList(_context.DeweyDecimalClassifications, "Id", "Id");
@@ -47,10 +48,9 @@ namespace Mohkazv.Library.WebApp.Controllers
             return View();
         }
 
-        // POST: Books/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost("create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Isbn,Name,Description,CoverPath,PublishInformation,TypeId,LanguageId,PublisherId,DdcId")] Book book)
         {
@@ -67,7 +67,6 @@ namespace Mohkazv.Library.WebApp.Controllers
             return View(book);
         }
 
-        // GET: Books/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -87,10 +86,9 @@ namespace Mohkazv.Library.WebApp.Controllers
             return View(book);
         }
 
-        // POST: Books/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost("edit/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Isbn,Name,Description,CoverPath,PublishInformation,TypeId,LanguageId,PublisherId,DdcId")] Book book)
         {
@@ -126,7 +124,7 @@ namespace Mohkazv.Library.WebApp.Controllers
             return View(book);
         }
 
-        // GET: Books/Delete/5
+        [HttpGet("delete/{id}")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -148,8 +146,7 @@ namespace Mohkazv.Library.WebApp.Controllers
             return View(book);
         }
 
-        // POST: Books/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost("delete/{id}"), ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
@@ -157,6 +154,38 @@ namespace Mohkazv.Library.WebApp.Controllers
             _context.Books.Remove(book);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet("search")]
+        public IActionResult Search()
+        {
+            return View();
+        }
+
+        [HttpPost("search"), ActionName("Search")]
+        public async Task<IActionResult> SearchAsk(string q, bool byAuthors = true, bool byPub = true, bool byLang = true, bool byDdc = true)
+        {
+            var books = _context.Books.AsQueryable();
+            var result = new List<Book>();
+
+            if (byPub) books = books.Include(book => book.Publisher);
+            if (byLang) books = books.Include(book => book.Language);
+            if (byDdc) books = books.Include(book => book.DeweyDecimalClassification);
+            if (byAuthors) books = books.Include(book => book.BookAuthors).ThenInclude(bookAuthor => bookAuthor.Author);
+
+            ViewData["searchedQuery"] = q;
+
+            return View("SearchAsk", await books
+                .Where(book =>
+                (!string.IsNullOrEmpty(book.Name) && book.Name.Contains(q)) ||
+                (!string.IsNullOrEmpty(book.Isbn) && book.Isbn.Contains(q)) ||
+                (!string.IsNullOrEmpty(book.Description) && book.Description.Contains(q)) ||
+                (!string.IsNullOrEmpty(book.PublishInformation) && book.PublishInformation.Contains(q)) ||
+                (book.Publisher != null && !string.IsNullOrEmpty(book.Publisher.Title) && book.Publisher.Title.Contains(q)) ||
+                (book.Language != null && !string.IsNullOrEmpty(book.Language.Name) && book.Language.Name.Contains(q)) ||
+                (book.DeweyDecimalClassification != null && !string.IsNullOrEmpty(book.DeweyDecimalClassification.Title) && book.DeweyDecimalClassification.Title.Contains(q)) ||
+                (book.BookAuthors != null && book.BookAuthors.Any(bookAuthors => bookAuthors.Author != null && (!string.IsNullOrEmpty(bookAuthors.Author.FirstName) && bookAuthors.Author.FirstName.Contains(q)) || (!string.IsNullOrEmpty(bookAuthors.Author.LastName) && bookAuthors.Author.LastName.Contains(q)))))
+                .ToListAsync());
         }
 
         private bool BookExists(int id)

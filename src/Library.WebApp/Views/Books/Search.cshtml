@@ -1,0 +1,31 @@
+﻿@{
+    ViewData["Title"] = "جست‌وجوی کتاب";
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+
+<div class="mb-2">
+    <a href="#" class="btn btn-light border my-2 js-history-back">
+        <i class="bi bi-arrow-right"></i>
+        بازگشت
+    </a>
+    <a asp-controller="Books" asp-action="Index" class="btn btn-light border my-2">
+        <i class="bi bi-list"></i>
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-12 col-md-6 mx-auto text-center my-4">
+        <p>
+            کافی‌ست قسمتی از مشخصات کتاب (عنوان، ناشر، نویسنده، موضوع و...) را وارد کنید تا آن را بیابید.
+        </p>
+        <form asp-controller="Books" asp-action="Search">
+            <div class="input-group dir-ltr">
+                <button class="btn btn-lg btn-primary" type="submit"><i class="bi bi-search"></i></button>
+                <button class="btn btn-lg btn-light border" type="button"><i class="bi bi-gear"></i></button>
+                <input type="text" name="q" class="form-control form-control-lg dir-rtl fa-num" placeholder="متنی برای جست‌وجو وارد کنید">
+            </div>
+        </form>
+    </div>
+</div>

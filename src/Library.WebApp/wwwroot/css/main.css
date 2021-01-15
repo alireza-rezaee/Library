@@ -552,3 +552,11 @@ html {
     left: unset;
     right: 0;
 }
+
+.bi {
+    font-family: initial;
+}
+
+.dir-rtl {
+    direction: rtl;
+}

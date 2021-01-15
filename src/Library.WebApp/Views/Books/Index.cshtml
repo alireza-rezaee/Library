@@ -12,6 +12,7 @@
         <i class="bi bi-arrow-right"></i>
         بازگشت
     </a>
+    <a asp-controller="Books" asp-action="Search" class="btn btn-light border"><i class="bi bi-search"></i></a>
     <a asp-controller="Books" asp-action="Create" class="btn btn-primary">افزودن کتاب جدید</a>
 </p>
 
@@ -39,7 +40,7 @@
                 {
                     var item = Model.ElementAt(i);
                     <tr>
-                        <td class="align-middle" style="width: 35px;">@((i+1).EnglishToPersian())</td>
+                        <td class="align-middle text-center" style="width: 35px;">@((i+1).EnglishToPersian())</td>
                         <td class="text-center align-middle" style="width: 50px;">
                             <img src="@item.CoverPath" alt="تصویر @item.Name" class="img-fluid" style="height: 150px;" />
                         </td>
