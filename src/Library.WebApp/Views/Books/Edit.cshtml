@@ -1,68 +1,105 @@
-﻿@model Mohkazv.Library.WebApp.Models.Book
+﻿@model Mohkazv.Library.WebApp.Models.ViewModels.Books.CreateEditViewModel
 
 @{
-    ViewData["Title"] = $"ویرایش مشخصات کتاب «{Model.Name}»";
+    ViewData["Title"] = $"ویرایش مشخصات کتاب «{Model.Book.Name}»";
+    var imagePath = Model.Book.CoverPath;
 }
 
 <h1>@ViewData["Title"]</h1>
 
 <hr />
-<form asp-controller="Books" asp-action="Edit" class="row fa-num">
+<form asp-controller="Books" asp-action="Edit" class="row fa-num" enctype="multipart/form-data">
     <div class="col-12 col-md-6">
         <div class="form-floating mb-3">
-            <input asp-for="Name" class="form-control" placeholder="@Html.DisplayNameFor(model => model.Name)">
-            <label asp-for="Name"></label>
+            <input asp-for="Book.Name" class="form-control" placeholder="@Html.DisplayNameFor(model => model.Book.Name)">
+            <label asp-for="Book.Name"></label>
         </div>
     </div>
     <div class="col-12 col-md-6">
         <div class="form-floating mb-3">
-            <input asp-for="Isbn" class="form-control" placeholder="@Html.DisplayNameFor(model => model.Isbn)">
-            <label asp-for="Isbn"></label>
-            <span asp-validation-for="Isbn" class="text-danger"></span>
+            <input asp-for="Book.Isbn" class="form-control" placeholder="@Html.DisplayNameFor(model => model.Book.Isbn)">
+            <label asp-for="Book.Isbn"></label>
+            <span asp-validation-for="Book.Isbn" class="text-danger"></span>
         </div>
     </div>
     <div class="col-12 col-md-6">
         <div class="form-floating mb-3">
-            <select asp-for="PublisherId" class="form-control" asp-items="ViewBag.PublisherId">
+            <select asp-for="Book.PublisherId" class="form-control" asp-items="ViewBag.PublisherId">
                 <option disabled selected>انتخاب کنید...</option>
             </select>
-            <label asp-for="PublisherId"></label>
+            <label asp-for="Book.PublisherId"></label>
         </div>
     </div>
     <div class="col-12 col-md-6">
         <div class="form-floating mb-3">
-            <input asp-for="PublishInformation" class="form-control" placeholder="@Html.DisplayNameFor(model => model.PublishInformation)">
-            <label asp-for="PublishInformation"></label>
-            <span asp-validation-for="PublishInformation" class="text-danger"></span>
+            <input asp-for="Book.PublishInformation" class="form-control" placeholder="@Html.DisplayNameFor(model => model.Book.PublishInformation)">
+            <label asp-for="Book.PublishInformation"></label>
+            <span asp-validation-for="Book.PublishInformation" class="text-danger"></span>
         </div>
     </div>
     <div class="col-12 col-md-6">
         <div class="form-floating mb-3">
-            <select asp-for="DdcId" class="form-control" asp-items="ViewBag.DdcId">
+            <select asp-for="Book.DdcId" class="form-control" asp-items="ViewBag.DdcId">
                 <option disabled selected>انتخاب کنید...</option>
             </select>
-            <label asp-for="DdcId"></label>
+            <label asp-for="Book.DdcId"></label>
         </div>
     </div>
     <div class="col-12 col-md-6">
         <div class="form-floating mb-3">
-            <input asp-for="TypeId" class="form-control" placeholder="@Html.DisplayNameFor(model => model.TypeId)">
-            <label asp-for="TypeId"></label>
+            <input asp-for="Book.TypeId" class="form-control" placeholder="@Html.DisplayNameFor(model => model.Book.TypeId)">
+            <label asp-for="Book.TypeId"></label>
         </div>
     </div>
     <div class="col-12 col-md-6">
         <div class="form-floating mb-3">
-            <select asp-for="LanguageId" class="form-control" asp-items="ViewBag.LanguageId" placeholder="@Html.DisplayNameFor(model => model.Language)">
+            <select asp-for="Book.LanguageId" class="form-control" asp-items="ViewBag.LanguageId" placeholder="@Html.DisplayNameFor(model => model.Book.Language)">
                 <option disabled selected>انتخاب کنید...</option>
             </select>
-            <label asp-for="LanguageId"></label>
+            <label asp-for="Book.LanguageId"></label>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="mb-3">
+            <div class="row bg-light rounded border">
+                <div class="col-12 col-sm-6 col-md-9">
+                    <div class="p-2">
+                        <b>تصویر کتاب</b>
+                        <hr class="w-50" />
+                        در صورت تمایل به درج تصویر کتاب، تصویری منطبق با شرایط زیر انتخاب کنید:
+                        <ul>
+                            <li>
+                                حجم تصویر تا سقف
+                                <span class="text-danger">۲ مگابایت</span>
+                                پذیرفته است.
+                            </li>
+                            <li>
+                                پسوند تصویر یکی از انواع
+                                <span class="text-danger">jpg</span>
+                                ،<span class="text-danger">jpeg</span>
+                                ،<span class="text-danger">png</span>
+                                یا
+                                <span class="text-danger">gif</span>
+                                باشد.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-md-3 text-end">
+                    <label asp-for="BookImage" class="btn post-image my-2 w-100 rounded border border-danger d-flex justify-content-center align-items-center bg-no-repeat bg-no-repeat js-book-image-preview"
+                           style="background-image: @if (imagePath != null) { <text> url('@imagePath'),</text>} repeating-linear-gradient(-45deg, #fff, #fff 20px, #eee 20px, #eee 40px); background-size: contain; background-position: center; height: 150px;">
+                        <span class="badge" style="background-color: rgba(0,0,0, 0.5);">انتخاب تصویر... <i class="bi bi-hand-index-thumb"></i></span>
+                    </label>
+                    <input asp-for="BookImage" type="file" class="d-none js-book-image">
+                </div>
+            </div>
         </div>
     </div>
     <div class="col-12">
         <div class="form-floating mb-3">
-            <textarea class="form-control" asp-for="Description" style="height: 100px" placeholder="توضیحاتی بنویسید..."></textarea>
-            <label asp-for="Description"></label>
-            <span asp-validation-for="Description" class="text-danger"></span>
+            <textarea class="form-control" asp-for="Book.Description" style="height: 100px" placeholder="توضیحاتی بنویسید..."></textarea>
+            <label asp-for="Book.Description"></label>
+            <span asp-validation-for="Book.Description" class="text-danger"></span>
         </div>
     </div>
     <div class="mb-2">
@@ -79,4 +116,24 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        function ImagePreview(fileEl, previewEl) {
+            if (fileEl.files != null && fileEl.files.length > 0) {
+                let preview = URL.createObjectURL(fileEl.files[0]);
+                previewEl.style.backgroundImage = `url('${preview}')`;
+                preview.addEventListener('load', function () {
+                    URL.revokeObjectURL(preview);
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            ImagePreview(document.querySelector('.js-book-image'), document.querySelector('.js-book-image-preview'));
+        });
+
+        document.querySelector('.js-book-image').addEventListener('change', function () {
+            ImagePreview(document.querySelector('.js-book-image'), document.querySelector('.js-book-image-preview'));
+        })
+    </script>
 }

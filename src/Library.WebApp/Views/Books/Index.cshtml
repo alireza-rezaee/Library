@@ -42,7 +42,14 @@
                     <tr>
                         <td class="align-middle text-center" style="width: 35px;">@((i+1).EnglishToPersian())</td>
                         <td class="text-center align-middle" style="width: 50px;">
-                            <img src="@item.CoverPath" alt="تصویر @item.Name" class="img-fluid" style="height: 150px;" />
+                            @if (!string.IsNullOrEmpty(item.CoverPath))
+                            {
+                                <img src="@item.CoverPath" alt="تصویر @item.Name" class="img-fluid" style="max-height: 80px;" />
+                            }
+                            else
+                            {
+                                <div class="badge bg-secondary">بدون عکس</div>
+                            }
                         </td>
                         <td class="align-middle">
                             @Html.DisplayFor(modelItem => item.Name)

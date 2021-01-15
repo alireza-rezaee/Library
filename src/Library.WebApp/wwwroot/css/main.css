@@ -560,3 +560,13 @@ html {
 .dir-rtl {
     direction: rtl;
 }
+
+/**/
+
+.bg-size-cover {
+    background-size: cover;
+}
+
+.bg-no-repeat {
+    background-repeat: no-repeat;
+}

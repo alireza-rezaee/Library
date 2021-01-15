@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = $"جزئیات کتاب «{Model.Name}»";
+    var imagePath = Model.CoverPath;
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -55,6 +56,42 @@
                 <option disabled selected>انتخاب کنید...</option>
             </select>
             <label asp-for="LanguageId"></label>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="mb-3">
+            <div class="row bg-light rounded border">
+                <div class="col-12 col-sm-6 col-md-9">
+                    <div class="p-2 text-muted">
+                        <b>تصویر کتاب</b>
+                        <hr class="w-50" />
+                        در صورت تمایل به درج تصویر کتاب، در هنگام ویرایش تصویری منطبق با شرایط زیر انتخاب کنید:
+                        <ul>
+                            <li>
+                                حجم تصویر تا سقف
+                                <span class="text-danger">۲ مگابایت</span>
+                                پذیرفته است.
+                            </li>
+                            <li>
+                                پسوند تصویر یکی از انواع
+                                <span class="text-danger">jpg</span>
+                                ،<span class="text-danger">jpeg</span>
+                                ،<span class="text-danger">png</span>
+                                یا
+                                <span class="text-danger">gif</span>
+                                باشد.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-md-3 text-end">
+                    <label for="BookImage" class="post-image my-2 w-100 rounded border border-dark d-flex justify-content-center align-items-center bg-no-repeat bg-no-repeat js-book-image-preview"
+                           style="background-image: @if (imagePath != null) { <text> url('@imagePath'),</text>} repeating-linear-gradient(-45deg, #fff, #fff 20px, #eee 20px, #eee 40px); background-size: contain; background-position: center; height: 150px;">
+                        <span class="badge" style="background-color: rgba(0,0,0, 0.5);">محل نمایش تصویر</span>
+                    </label>
+                    <input name="BookImage" id="BookImage" type="file" class="d-none js-book-image" disabled>
+                </div>
+            </div>
         </div>
     </div>
     <div class="col-12">
