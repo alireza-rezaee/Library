@@ -76,9 +76,6 @@ let AppHelpers = {
         },
         hasWriteBefore: function (itemName) {
             return AppHelpers.authorsUi.readAll().some(value => value == itemName);
-        },
-        ajaxSuggestion: function (name) {
-
         }
     }
 };

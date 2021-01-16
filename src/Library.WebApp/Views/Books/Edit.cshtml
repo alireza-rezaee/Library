@@ -145,7 +145,7 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
-    <script>
+<script>
         document.addEventListener('DOMContentLoaded', function () {
             ImagePreview(document.querySelector('.js-book-image'), document.querySelector('.js-book-image-preview'));
         });
@@ -158,9 +158,36 @@
         AppHelpers.authorsUi.writeItemClassSelector = 'list-item';
         AppHelpers.authorsUi.inputItemName = 'AuthorNames[]';
 
-        let newAuthorInput = document.querySelector('#author-name-input');
+        const newAuthorInput = document.querySelector('#author-name-input');
+        const suggestionsDataList = document.querySelector('#author-suggestions');
+        newAuthorInput.addEventListener('keyup', function () {
+            if (newAuthorInput.value.trim() != '') {
+                fetch(`@Url.ActionLink("Suggestions", "Authors")?q=${newAuthorInput.value}`, { method: 'POST' })
+                    .then(res => res = res.json())
+                    .then(data => {
+                        while (suggestionsDataList.firstChild)
+                            suggestionsDataList.removeChild(suggestionsDataList.firstChild);
+
+                        if (Array.isArray(data)) {
+                            for (var item of data) {
+                                var suggestionEl = document.createElement("option");
+                                suggestionEl.setAttribute('value', item);
+                                suggestionsDataList.appendChild(suggestionEl);
+                            }
+                        }
+                        else
+                            throw exception();
+                    })
+                    .catch(e => { console.log(`An error occurred while displaying the suggestions. ${e}`) });
+            }
+            else {
+                while (suggestionsDataList.firstChild)
+                    suggestionsDataList.removeChild(suggestionsDataList.firstChild);
+            }
+        });
         document.querySelector('#add-author-button').addEventListener('click', function () {
             AppHelpers.authorsUi.writeOne(newAuthorInput.value);
+            newAuthorInput.value = '';
         });
-    </script>
+</script>
 }

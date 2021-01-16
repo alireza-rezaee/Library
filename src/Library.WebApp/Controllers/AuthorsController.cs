@@ -119,6 +119,13 @@ namespace Mohkazv.Library.WebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Route("suggestions")]
+        public async Task<List<string>> Suggestions(string q)
+        {
+            if (string.IsNullOrEmpty(q)) return null;
+            return await _context.Authors.Where(a => a.FullName.Contains(q)).Take(10).Select(a => a.FullName).ToListAsync();
+        }
+
         private bool AuthorExists(int id)
         {
             return _context.Authors.Any(e => e.Id == id);
