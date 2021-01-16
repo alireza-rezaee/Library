@@ -9,9 +9,7 @@ namespace Mohkazv.Library.WebApp.Models
 {
     public class DeweyDecimalClassification
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         [Required(ErrorMessage = "وارد کردن {0} رده‌بندی دیویی الزامی است.")]
         [MaxLength(300, ErrorMessage = "{0} رده‌بندی دیویی تا سقف {1} کاراکتر طول دارد.")]

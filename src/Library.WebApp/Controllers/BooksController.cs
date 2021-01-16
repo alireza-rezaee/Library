@@ -53,7 +53,7 @@ namespace Mohkazv.Library.WebApp.Controllers
         [HttpGet("create")]
         public IActionResult Create()
         {
-            ViewData["DdcId"] = new SelectList(_context.DeweyDecimalClassifications, "Id", "Id");
+            ViewData["DdcId"] = new SelectList(_context.DeweyDecimalClassifications, "Id", "Title");
             ViewData["LanguageId"] = new SelectList(_context.Languages, "Id", "Name");
             ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Title");
             ViewData["TypeId"] = new SelectList(_context.Types, "Id", "Title");
@@ -107,7 +107,7 @@ namespace Mohkazv.Library.WebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DdcId"] = new SelectList(_context.DeweyDecimalClassifications, "Id", "Id", vm.Book.DdcId);
+            ViewData["DdcId"] = new SelectList(_context.DeweyDecimalClassifications, "Id", "Title", vm.Book.DdcId);
             ViewData["LanguageId"] = new SelectList(_context.Languages, "Id", "Name", vm.Book.LanguageId);
             ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Title", vm.Book.PublisherId);
             ViewData["TypeId"] = new SelectList(_context.Types, "Id", "Title", vm.Book.TypeId);
@@ -127,7 +127,7 @@ namespace Mohkazv.Library.WebApp.Controllers
             if (book == null)
                 return NotFound();
 
-            ViewData["DdcId"] = new SelectList(_context.DeweyDecimalClassifications, "Id", "Id", book.DdcId);
+            ViewData["DdcId"] = new SelectList(_context.DeweyDecimalClassifications, "Id", "Title", book.DdcId);
             ViewData["LanguageId"] = new SelectList(_context.Languages, "Id", "Name", book.LanguageId);
             ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Title", book.PublisherId);
             ViewData["TypeId"] = new SelectList(_context.Types, "Id", "Title", book.TypeId);
@@ -220,7 +220,7 @@ namespace Mohkazv.Library.WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DdcId"] = new SelectList(_context.DeweyDecimalClassifications, "Id", "Id", vm.Book.DdcId);
+            ViewData["DdcId"] = new SelectList(_context.DeweyDecimalClassifications, "Id", "Title", vm.Book.DdcId);
             ViewData["LanguageId"] = new SelectList(_context.Languages, "Id", "Name", vm.Book.LanguageId);
             ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Title", vm.Book.PublisherId);
             ViewData["TypeId"] = new SelectList(_context.Types, "Id", "Title", vm.Book.TypeId);

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mohkazv.Library.WebApp.Data;
 
 namespace Mohkazv.Library.WebApp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210116171429_AlterDecimalClassifications01")]
+    partial class AlterDecimalClassifications01
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -365,7 +367,7 @@ namespace Mohkazv.Library.WebApp.Data.Migrations
 
             modelBuilder.Entity("Mohkazv.Library.WebApp.Models.DeweyDecimalClassification", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("Temp")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
@@ -375,7 +377,7 @@ namespace Mohkazv.Library.WebApp.Data.Migrations
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
-                    b.HasKey("Id");
+                    b.HasKey("Temp");
 
                     b.ToTable("DeweyDecimalClassifications");
                 });
