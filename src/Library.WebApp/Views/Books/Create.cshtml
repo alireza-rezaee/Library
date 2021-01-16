@@ -31,23 +31,10 @@
     </div>
     <div class="col-12 col-md-6">
         <div class="form-floating mb-3">
-            <input asp-for="Book.PublishInformation" class="form-control" placeholder="@Html.DisplayNameFor(model => model.Book.PublishInformation)">
-            <label asp-for="Book.PublishInformation"></label>
-            <span asp-validation-for="Book.PublishInformation" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="col-12 col-md-6">
-        <div class="form-floating mb-3">
             <select asp-for="Book.DdcId" class="form-control" asp-items="ViewBag.DdcId">
                 <option disabled selected>انتخاب کنید...</option>
             </select>
             <label asp-for="Book.DdcId"></label>
-        </div>
-    </div>
-    <div class="col-12 col-md-6">
-        <div class="form-floating mb-3">
-            <input asp-for="Book.TypeId" class="form-control" placeholder="@Html.DisplayNameFor(model => model.Book.TypeId)">
-            <label asp-for="Book.TypeId"></label>
         </div>
     </div>
     <div class="col-12 col-md-6">

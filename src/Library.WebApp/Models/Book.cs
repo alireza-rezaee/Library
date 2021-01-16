@@ -25,14 +25,6 @@ namespace Mohkazv.Library.WebApp.Models
         [MaxLength(300, ErrorMessage = "{0} کتاب تا سقف {1} کاراکتر طول دارد.")]
         public string CoverPath { get; set; }
 
-        [MaxLength(250, ErrorMessage = "{0} کتاب تا سقف {1} کاراکتر طول دارد.")]
-        [Display(Name = "مشخصات نشر")]
-        public string PublishInformation { get; set; }
-
-        [Display(Name = "نوع")]
-        [ForeignKey(nameof(Type))]
-        public int? TypeId { get; set; }
-
         [Display(Name = "زبان")]
         [ForeignKey(nameof(Language))]
         public int LanguageId { get; set; }
@@ -46,9 +38,6 @@ namespace Mohkazv.Library.WebApp.Models
         public int DdcId { get; set; }
 
         #region Relationships
-        [Display(Name = "نوع ماده")]
-        public Type Type { get; set; }
-
         [Display(Name = "زبان")]
         public Language Language { get; set; }
 

@@ -24,8 +24,6 @@ namespace Mohkazv.Library.WebApp.Data
 
         public DbSet<Publisher> Publishers { get; set; }
 
-        public DbSet<Models.Type> Types { get; set; }
-
         public DbSet<DeweyDecimalClassification> DeweyDecimalClassifications { get; set; }
 
         public DbSet<BookAuthor> BookAuthors { get; set; }

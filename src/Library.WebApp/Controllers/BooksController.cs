@@ -28,7 +28,7 @@ namespace Mohkazv.Library.WebApp.Controllers
 
         [HttpGet("")]
         public async Task<IActionResult> Index()
-            => View(await _context.Books.Include(b => b.DeweyDecimalClassification).Include(b => b.Language).Include(b => b.Publisher).Include(b => b.Type).ToListAsync());
+            => View(await _context.Books.Include(b => b.DeweyDecimalClassification).Include(b => b.Language).Include(b => b.Publisher).ToListAsync());
 
         [HttpGet("details/{id}")]
         public async Task<IActionResult> Details(int? id)
@@ -40,7 +40,6 @@ namespace Mohkazv.Library.WebApp.Controllers
                 .Include(b => b.DeweyDecimalClassification)
                 .Include(b => b.Language)
                 .Include(b => b.Publisher)
-                .Include(b => b.Type)
                 .Include(b => b.BookAuthors).ThenInclude(ba => ba.Author)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
@@ -56,7 +55,6 @@ namespace Mohkazv.Library.WebApp.Controllers
             ViewData["DdcId"] = new SelectList(_context.DeweyDecimalClassifications, "Id", "Title");
             ViewData["LanguageId"] = new SelectList(_context.Languages, "Id", "Name");
             ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Title");
-            ViewData["TypeId"] = new SelectList(_context.Types, "Id", "Title");
             return View();
         }
 
@@ -110,7 +108,6 @@ namespace Mohkazv.Library.WebApp.Controllers
             ViewData["DdcId"] = new SelectList(_context.DeweyDecimalClassifications, "Id", "Title", vm.Book.DdcId);
             ViewData["LanguageId"] = new SelectList(_context.Languages, "Id", "Name", vm.Book.LanguageId);
             ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Title", vm.Book.PublisherId);
-            ViewData["TypeId"] = new SelectList(_context.Types, "Id", "Title", vm.Book.TypeId);
             return View(vm);
         }
 
@@ -130,7 +127,6 @@ namespace Mohkazv.Library.WebApp.Controllers
             ViewData["DdcId"] = new SelectList(_context.DeweyDecimalClassifications, "Id", "Title", book.DdcId);
             ViewData["LanguageId"] = new SelectList(_context.Languages, "Id", "Name", book.LanguageId);
             ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Title", book.PublisherId);
-            ViewData["TypeId"] = new SelectList(_context.Types, "Id", "Title", book.TypeId);
 
             return View(new CreateEditViewModel { Book = book, AuthorNames = book.BookAuthors.Select(ba => ba.Author.FullName).ToArray() });
         }
@@ -158,8 +154,6 @@ namespace Mohkazv.Library.WebApp.Controllers
                     book.Name = vm.Book.Name;
                     book.Isbn = vm.Book.Isbn;
                     book.Description = vm.Book.Description;
-                    book.PublishInformation = vm.Book.PublishInformation;
-                    book.TypeId = vm.Book.TypeId;
                     book.DdcId = vm.Book.DdcId;
                     book.PublisherId = vm.Book.PublisherId;
                     book.LanguageId = vm.Book.LanguageId;
@@ -223,7 +217,6 @@ namespace Mohkazv.Library.WebApp.Controllers
             ViewData["DdcId"] = new SelectList(_context.DeweyDecimalClassifications, "Id", "Title", vm.Book.DdcId);
             ViewData["LanguageId"] = new SelectList(_context.Languages, "Id", "Name", vm.Book.LanguageId);
             ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Title", vm.Book.PublisherId);
-            ViewData["TypeId"] = new SelectList(_context.Types, "Id", "Title", vm.Book.TypeId);
             return View(vm);
         }
 
@@ -237,7 +230,6 @@ namespace Mohkazv.Library.WebApp.Controllers
                 .Include(b => b.DeweyDecimalClassification)
                 .Include(b => b.Language)
                 .Include(b => b.Publisher)
-                .Include(b => b.Type)
                 .Include(b => b.BookAuthors).ThenInclude(ba => ba.Author)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
@@ -287,7 +279,6 @@ namespace Mohkazv.Library.WebApp.Controllers
                 (!string.IsNullOrEmpty(book.Name) && book.Name.Contains(q)) ||
                 (!string.IsNullOrEmpty(book.Isbn) && book.Isbn.Contains(q)) ||
                 (!string.IsNullOrEmpty(book.Description) && book.Description.Contains(q)) ||
-                (!string.IsNullOrEmpty(book.PublishInformation) && book.PublishInformation.Contains(q)) ||
                 (book.Publisher != null && !string.IsNullOrEmpty(book.Publisher.Title) && book.Publisher.Title.Contains(q)) ||
                 (book.Language != null && !string.IsNullOrEmpty(book.Language.Name) && book.Language.Name.Contains(q)) ||
                 (book.DeweyDecimalClassification != null && !string.IsNullOrEmpty(book.DeweyDecimalClassification.Title) && book.DeweyDecimalClassification.Title.Contains(q)) ||
