@@ -2,6 +2,8 @@
   {
     "outputFileName": "wwwroot/css/main.min.css",
     "inputFiles": [
+      "wwwroot/css/fontiran.css",
+      "wwwroot/css/customized-bootstrap.css",
       "wwwroot/css/main.css"
     ]
   },

@@ -129,6 +129,26 @@
     </div>
 </form>
 
+<div class="accordion" id="related-accordion">
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#related-collapse">
+                صفحات مرتبط
+            </button>
+        </h2>
+        <div id="related-collapse" class="accordion-collapse collapse" data-bs-parent="#related-accordion">
+            <div class="accordion-body">
+                <ul>
+                    <li><a asp-controller="Publishers" asp-action="Index" class="text-decoration-none">فهرست ناشران</a></li>
+                    <li><a asp-controller="Publishers" asp-action="Index" class="text-decoration-none">افزودن ناشر جدید</a></li>
+                    <li><a asp-controller="Publishers" asp-action="Index" class="text-decoration-none">فهرست نویسندگان</a></li>
+                    <li><a asp-controller="Publishers" asp-action="Index" class="text-decoration-none">فهرست زبان‌ها</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
