@@ -13,9 +13,10 @@ namespace Mohkazv.Library.WebApp.Data.Migrations
 
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            InsertDefaultLanguages.DownMethod(migrationBuilder);
+            //InsertDefaultLanguages.DownMethod(migrationBuilder);
 
             var ddcs = new StringBuilder();
+            ddcs.Append("DELETE FROM [Languages]\nDBCC CHECKIDENT ('[Languages]', RESEED, 0)\nGO\n");
             foreach (var lang in languages)
                 ddcs.Append($"INSERT INTO [Languages] ([Name]) VALUES (N'{lang}')\n");
             migrationBuilder.Sql(ddcs.ToString());
