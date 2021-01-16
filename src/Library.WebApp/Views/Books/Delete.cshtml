@@ -58,6 +58,21 @@
             <label asp-for="LanguageId"></label>
         </div>
     </div>
+    <div class="col-12 my-3">
+        <p>نویسنده(گان):</p>
+        <div id="authors-list">
+            @if (Model.BookAuthors != null && Model.BookAuthors.Any())
+            {
+                foreach (var bookAuthor in Model.BookAuthors)
+                {
+                    <div class="alert alert-secondary border alert-dismissible fade show d-inline-block mx-2">
+                        <input class="list-item d-none" name="AuthorNames[]" value="@bookAuthor.Author.FullName">
+                        <span>@bookAuthor.Author.FullName</span>
+                    </div>
+                }
+            }
+        </div>
+    </div>
     <div class="col-12">
         <div class="mb-3">
             <div class="row bg-light rounded border">

@@ -1,4 +1,5 @@
-﻿@model Mohkazv.Library.WebApp.Models.ViewModels.Books.CreateEditViewModel
+﻿@using System.Text.Json.Serialization;
+@model Mohkazv.Library.WebApp.Models.ViewModels.Books.CreateEditViewModel
 
 @{
     ViewData["Title"] = $"ویرایش مشخصات کتاب «{Model.Book.Name}»";
@@ -57,6 +58,33 @@
                 <option disabled selected>انتخاب کنید...</option>
             </select>
             <label asp-for="Book.LanguageId"></label>
+        </div>
+    </div>
+    <div class="col-12 my-3">
+        <p>نویسنده(گان):</p>
+        <small class="form-text text-muted small mb-2">
+            نویسنده یا نویسندگان اثر را یک به یک معرفی کنید.
+        </small>
+        <div class="input-group w-50 mb-2 me-sm-2 dir-ltr">
+            <div class="input-group-prepend">
+                <button type="button" class="btn btn-light border" id="add-author-button">افزودن</button>
+            </div>
+            <input list="tag-suggestions" class="form-select" id="author-name-input" style="direction: rtl;" autocomplete="off">
+            <datalist id="tag-suggestions">
+            </datalist>
+        </div>
+        <div id="authors-list">
+            @if (Model.AuthorNames != null && Model.AuthorNames.Any())
+            {
+                foreach (var author in Model.AuthorNames)
+                {
+                    <div class="alert alert-light border alert-dismissible fade show d-inline-block mx-2">
+                        <input class="list-item d-none" name="AuthorNames[]" value="@author">
+                        <span>@author</span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+            }
         </div>
     </div>
     <div class="col-12">
@@ -118,22 +146,21 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
     <script>
-        function ImagePreview(fileEl, previewEl) {
-            if (fileEl.files != null && fileEl.files.length > 0) {
-                let preview = URL.createObjectURL(fileEl.files[0]);
-                previewEl.style.backgroundImage = `url('${preview}')`;
-                preview.addEventListener('load', function () {
-                    URL.revokeObjectURL(preview);
-                });
-            }
-        }
-
         document.addEventListener('DOMContentLoaded', function () {
             ImagePreview(document.querySelector('.js-book-image'), document.querySelector('.js-book-image-preview'));
         });
 
         document.querySelector('.js-book-image').addEventListener('change', function () {
             ImagePreview(document.querySelector('.js-book-image'), document.querySelector('.js-book-image-preview'));
-        })
+        });
+
+        AppHelpers.authorsUi.writeListEl = document.querySelector('#authors-list');
+        AppHelpers.authorsUi.writeItemClassSelector = 'list-item';
+        AppHelpers.authorsUi.inputItemName = 'AuthorNames[]';
+
+        let newAuthorInput = document.querySelector('#author-name-input');
+        document.querySelector('#add-author-button').addEventListener('click', function () {
+            AppHelpers.authorsUi.writeOne(newAuthorInput.value);
+        });
     </script>
 }

@@ -12,5 +12,7 @@ namespace Mohkazv.Library.WebApp.Models.ViewModels.Books
         public Book Book { get; set; }
 
         public IFormFile BookImage { get; set; }
+
+        public string[] AuthorNames { get; set; }
     }
 }

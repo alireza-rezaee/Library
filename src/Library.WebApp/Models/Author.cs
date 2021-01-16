@@ -12,17 +12,9 @@ namespace Mohkazv.Library.WebApp.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "وارد کردن {0} نویسنده الزامی است.")]
-        [MaxLength(50, ErrorMessage = "{0} نویسنده تا سقف {1} کاراکتر طول دارد.")]
-        [Display(Name = "نام")]
-        public string FirstName { get; set; }
-
-        [Required(ErrorMessage = "وارد کردن {0} نویسنده الزامی است.")]
-        [MaxLength(50, ErrorMessage = "{0} نویسنده تا سقف {1} کاراکتر طول دارد.")]
-        [Display(Name = "نام خانوادگی")]
-        public string LastName { get; set; }
-
-        [NotMapped]
-        public string FullName { get => $"{FirstName} {LastName}"; }
+        [MaxLength(100, ErrorMessage = "{0} نویسنده تا سقف {1} کاراکتر طول دارد.")]
+        [Display(Name = "نام و نام خانوادگی")]
+        public string FullName { get; set; }
 
         #region RelationShips
         public ICollection<BookAuthor> BookAuthors { get; set; }

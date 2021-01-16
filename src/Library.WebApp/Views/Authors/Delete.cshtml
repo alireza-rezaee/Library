@@ -9,7 +9,7 @@
 <div class="alert alert-danger" role="alert">
     <b>هشدار:</b>
     شما در حال حذف نویسنده
-    «@Model.FirstName @Model.LastName»
+    «@Model.FullName»
     می‌باشید. آیا از حذف دائمی اطمینان دارید؟
 </div>
 
@@ -19,14 +19,9 @@
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
         <div class="mb-2">
-            <label asp-for="FirstName" class="control-label"></label>
-            <input asp-for="FirstName" class="form-control" readonly/>
-            <span asp-validation-for="FirstName" class="text-danger"></span>
-        </div>
-        <div class="mb-2">
-            <label asp-for="LastName" class="control-label"></label>
-            <input asp-for="LastName" class="form-control" readonly/>
-            <span asp-validation-for="LastName" class="text-danger"></span>
+            <label asp-for="FullName" class="control-label"></label>
+            <input asp-for="FullName" class="form-control" readonly/>
+            <span asp-validation-for="FullName" class="text-danger"></span>
         </div>
         <form asp-action="Delete" class="mb-2">
             <a href="#" class="btn btn-light border my-2 js-history-back">

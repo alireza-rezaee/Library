@@ -23,10 +23,7 @@
                 <tr>
                     <th style="width: 35px;">ردیف</th>
                     <th>
-                        @Html.DisplayNameFor(model => model.FirstName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.LastName)
+                        @Html.DisplayNameFor(model => model.FullName)
                     </th>
                     <th>
                         عملیات‌ها
@@ -42,10 +39,7 @@
                         <tr>
                             <td class="text-center" style="width: 35px;">@((i+1).EnglishToPersian())</td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.FirstName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.LastName)
+                                @Html.DisplayFor(modelItem => item.FullName)
                             </td>
                             <td>
                                 <a asp-controller="Authors" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-success lh-1" style="font-size:0 !important;">

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -39,6 +40,7 @@ namespace Mohkazv.Library.WebApp.Controllers
                 .Include(b => b.Language)
                 .Include(b => b.Publisher)
                 .Include(b => b.Type)
+                .Include(b => b.BookAuthors).ThenInclude(ba => ba.Author)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (book == null) return NotFound();
@@ -79,6 +81,23 @@ namespace Mohkazv.Library.WebApp.Controllers
                     vm.Book.CoverPath = $"/{imagePath}";
                 }
 
+                // START::Authors
+                if (vm.AuthorNames != null)
+                {
+                    vm.AuthorNames = vm.AuthorNames.Select(an => an.Trim()).Where(an => !string.IsNullOrEmpty(an)).ToArray();
+
+                    var authors = await _context.Authors.Where(author => vm.AuthorNames.Contains(author.FullName)).ToListAsync();
+
+                    foreach (var authorName in vm.AuthorNames)
+                        if (!authors.Any(a => a.FullName == authorName))
+                            authors.Add(new Author { FullName = authorName });
+
+                    vm.Book.BookAuthors = new List<BookAuthor>();
+                    foreach (var author in authors)
+                        vm.Book.BookAuthors.Add(new BookAuthor { Book = vm.Book, Author = author });
+                }
+                // END::Authors
+
                 _context.Add(vm.Book);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -98,7 +117,9 @@ namespace Mohkazv.Library.WebApp.Controllers
                 return NotFound();
             }
 
-            var book = await _context.Books.FindAsync(id);
+            var book = await _context.Books
+                .Include(b => b.BookAuthors).ThenInclude(ba => ba.Author)
+                .FirstOrDefaultAsync(b => b.Id == id);
             if (book == null)
                 return NotFound();
 
@@ -107,7 +128,7 @@ namespace Mohkazv.Library.WebApp.Controllers
             ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Title", book.PublisherId);
             ViewData["TypeId"] = new SelectList(_context.Types, "Id", "Title", book.TypeId);
 
-            return View(new CreateEditViewModel { Book = book });
+            return View(new CreateEditViewModel { Book = book, AuthorNames = book.BookAuthors.Select(ba => ba.Author.FullName).ToArray() });
         }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -119,7 +140,9 @@ namespace Mohkazv.Library.WebApp.Controllers
             if (id == null)
                 return NotFound();
 
-            var book = await _context.Books.FindAsync(id);
+            var book = await _context.Books
+                .Include(b => b.BookAuthors).ThenInclude(ba => ba.Author)
+                .FirstOrDefaultAsync(b => b.Id == id);
             if (book == null)
                 return NotFound();
 
@@ -150,6 +173,28 @@ namespace Mohkazv.Library.WebApp.Controllers
 
                         book.CoverPath = $"/{imagePath}";
                     }
+
+                    #region Edit Authors of the inprocess book (Purpose: Add, insert or remove from «BookAuthors» table/entity)
+                    // Target DB Table is BookAuthors
+
+                    // 1.   DELETE
+                    // 1.1      - DELETE 'BookAuthors' records that belong to former authors who are no longer the authors of this book
+                    var oldAuthorsThatNotBeAsThisBookAuthorAnyMore = book.BookAuthors.Where(ba => !vm.AuthorNames.Contains(ba.Author.FullName)).ToList();
+                    foreach (var bookAuthor in oldAuthorsThatNotBeAsThisBookAuthorAnyMore)
+                        book.BookAuthors.Remove(bookAuthor);
+
+                    // 2.   INSERT
+                    // 2.1      - INSERT 'BookAuthors' records of new authors already on the table
+                    var dbExistAuthors = await _context.Authors.Where(a => vm.AuthorNames.Contains(a.FullName)).ToListAsync();
+                    var newDbExistAuthors = dbExistAuthors.Where(a => !book.BookAuthors.Select(ba => ba.Author).Contains(a));
+                    foreach (var author in newDbExistAuthors)
+                        book.BookAuthors.Add(new BookAuthor { Book = book, Author = author });
+
+                    // 2.1      - INSERT 'BookAuthors' records related to new authors who were not previously listed as authors
+                    var newNonDbExistAuthors = vm.AuthorNames.Where(an => !dbExistAuthors.Select(a => a.FullName).Contains(an));
+                    foreach (var author in newNonDbExistAuthors)
+                        book.BookAuthors.Add(new BookAuthor { Book = book, Author = new Author { FullName = author } });
+                    #endregion Edit Authors of the inprocess book (Purpose: Add, insert or remove from «BookAuthors» table/entity)
 
                     _context.Update(book);
                     await _context.SaveChangesAsync();
@@ -187,6 +232,7 @@ namespace Mohkazv.Library.WebApp.Controllers
                 .Include(b => b.Language)
                 .Include(b => b.Publisher)
                 .Include(b => b.Type)
+                .Include(b => b.BookAuthors).ThenInclude(ba => ba.Author)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (book == null)
             {
@@ -237,7 +283,7 @@ namespace Mohkazv.Library.WebApp.Controllers
                 (book.Publisher != null && !string.IsNullOrEmpty(book.Publisher.Title) && book.Publisher.Title.Contains(q)) ||
                 (book.Language != null && !string.IsNullOrEmpty(book.Language.Name) && book.Language.Name.Contains(q)) ||
                 (book.DeweyDecimalClassification != null && !string.IsNullOrEmpty(book.DeweyDecimalClassification.Title) && book.DeweyDecimalClassification.Title.Contains(q)) ||
-                (book.BookAuthors != null && book.BookAuthors.Any(bookAuthors => bookAuthors.Author != null && (!string.IsNullOrEmpty(bookAuthors.Author.FirstName) && bookAuthors.Author.FirstName.Contains(q)) || (!string.IsNullOrEmpty(bookAuthors.Author.LastName) && bookAuthors.Author.LastName.Contains(q)))))
+                (book.BookAuthors != null && book.BookAuthors.Any(bookAuthors => bookAuthors.Author != null && (!string.IsNullOrEmpty(bookAuthors.Author.FullName) && bookAuthors.Author.FullName.Contains(q)))))
                 .ToListAsync());
         }
 
