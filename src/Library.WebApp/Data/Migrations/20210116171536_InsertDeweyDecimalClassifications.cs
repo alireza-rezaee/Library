@@ -18,7 +18,7 @@ namespace Mohkazv.Library.WebApp.Data.Migrations
         {
             var ddcs = new StringBuilder(3 * 1000);
             for (var i = 0; i < 1000; i++)
-                ddcs.Append($"DELETE FROM [DeweyDecimalClassifications] WHERE ([Title]) = N'{$"{i:000}".EnglishNumberToPersian()}')\n");
+                ddcs.Append($"DELETE FROM [DeweyDecimalClassifications] WHERE ([Title] = N'{$"{i:000}".EnglishNumberToPersian()}')\n");
             migrationBuilder.Sql(ddcs.ToString());
         }
     }
