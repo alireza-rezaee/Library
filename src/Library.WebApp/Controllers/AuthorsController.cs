@@ -43,15 +43,13 @@ namespace Mohkazv.Library.WebApp.Controllers
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
             var author = await _context.Authors.FindAsync(id);
+
             if (author == null)
-            {
                 return NotFound();
-            }
+
             return View(author);
         }
 
@@ -60,50 +58,38 @@ namespace Mohkazv.Library.WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName")] Author author)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName")] Author modelAuthor)
         {
-            if (id != author.Id)
-            {
+            if (id != modelAuthor.Id)
                 return NotFound();
-            }
+
+            var author = await _context.Authors.FindAsync(id);
+            if (author == null)
+                return NotFound();
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(author);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AuthorExists(author.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                author.FullName = modelAuthor.FullName;
+
+                _context.Update(author);
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
-            return View(author);
+            return View(modelAuthor);
         }
 
         [HttpGet("delete/{id}")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
             var author = await _context.Authors
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FindAsync(id);
+
             if (author == null)
-            {
                 return NotFound();
-            }
 
             return View(author);
         }
@@ -114,6 +100,10 @@ namespace Mohkazv.Library.WebApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var author = await _context.Authors.FindAsync(id);
+
+            if (author == null)
+                return NotFound();
+
             _context.Authors.Remove(author);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

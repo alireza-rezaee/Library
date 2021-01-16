@@ -33,7 +33,8 @@ namespace Mohkazv.Library.WebApp.Controllers
         [HttpGet("details/{id}")]
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null) return NotFound();
+            if (id == null)
+                return NotFound();
 
             var book = await _context.Books
                 .Include(b => b.DeweyDecimalClassification)
@@ -43,7 +44,8 @@ namespace Mohkazv.Library.WebApp.Controllers
                 .Include(b => b.BookAuthors).ThenInclude(ba => ba.Author)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (book == null) return NotFound();
+            if (book == null)
+                return NotFound();
 
             return View(book);
         }
@@ -86,15 +88,18 @@ namespace Mohkazv.Library.WebApp.Controllers
                 {
                     vm.AuthorNames = vm.AuthorNames.Select(an => an.Trim()).Where(an => !string.IsNullOrEmpty(an)).ToArray();
 
-                    var authors = await _context.Authors.Where(author => vm.AuthorNames.Contains(author.FullName)).ToListAsync();
+                    if (vm.AuthorNames != null && vm.AuthorNames.Any())
+                    {
+                        var authors = await _context.Authors.Where(author => vm.AuthorNames.Contains(author.FullName)).ToListAsync();
 
-                    foreach (var authorName in vm.AuthorNames)
-                        if (!authors.Any(a => a.FullName == authorName))
-                            authors.Add(new Author { FullName = authorName });
+                        foreach (var authorName in vm.AuthorNames)
+                            if (!authors.Any(a => a.FullName == authorName))
+                                authors.Add(new Author { FullName = authorName });
 
-                    vm.Book.BookAuthors = new List<BookAuthor>();
-                    foreach (var author in authors)
-                        vm.Book.BookAuthors.Add(new BookAuthor { Book = vm.Book, Author = author });
+                        vm.Book.BookAuthors = new List<BookAuthor>();
+                        foreach (var author in authors)
+                            vm.Book.BookAuthors.Add(new BookAuthor { Book = vm.Book, Author = author });
+                    }
                 }
                 // END::Authors
 
@@ -113,13 +118,12 @@ namespace Mohkazv.Library.WebApp.Controllers
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
             var book = await _context.Books
                 .Include(b => b.BookAuthors).ThenInclude(ba => ba.Author)
                 .FirstOrDefaultAsync(b => b.Id == id);
+
             if (book == null)
                 return NotFound();
 
@@ -143,6 +147,7 @@ namespace Mohkazv.Library.WebApp.Controllers
             var book = await _context.Books
                 .Include(b => b.BookAuthors).ThenInclude(ba => ba.Author)
                 .FirstOrDefaultAsync(b => b.Id == id);
+
             if (book == null)
                 return NotFound();
 
@@ -179,20 +184,23 @@ namespace Mohkazv.Library.WebApp.Controllers
 
                     // 1.   DELETE
                     // 1.1      - DELETE 'BookAuthors' records that belong to former authors who are no longer the authors of this book
+                    vm.AuthorNames ??= Array.Empty<string>();
+                    book.BookAuthors ??= new List<BookAuthor>();
                     var oldAuthorsThatNotBeAsThisBookAuthorAnyMore = book.BookAuthors.Where(ba => !vm.AuthorNames.Contains(ba.Author.FullName)).ToList();
-                    foreach (var bookAuthor in oldAuthorsThatNotBeAsThisBookAuthorAnyMore)
+                    foreach (var bookAuthor in oldAuthorsThatNotBeAsThisBookAuthorAnyMore ?? Enumerable.Empty<BookAuthor>())
                         book.BookAuthors.Remove(bookAuthor);
 
                     // 2.   INSERT
                     // 2.1      - INSERT 'BookAuthors' records of new authors already on the table
                     var dbExistAuthors = await _context.Authors.Where(a => vm.AuthorNames.Contains(a.FullName)).ToListAsync();
-                    var newDbExistAuthors = dbExistAuthors.Where(a => !book.BookAuthors.Select(ba => ba.Author).Contains(a));
-                    foreach (var author in newDbExistAuthors)
+                    dbExistAuthors ??= new List<Author>();
+                    var newDbExistAuthors = dbExistAuthors?.Where(a => !book.BookAuthors.Select(ba => ba.Author).Contains(a));
+                    foreach (var author in newDbExistAuthors ?? Enumerable.Empty<Author>())
                         book.BookAuthors.Add(new BookAuthor { Book = book, Author = author });
 
                     // 2.1      - INSERT 'BookAuthors' records related to new authors who were not previously listed as authors
                     var newNonDbExistAuthors = vm.AuthorNames.Where(an => !dbExistAuthors.Select(a => a.FullName).Contains(an));
-                    foreach (var author in newNonDbExistAuthors)
+                    foreach (var author in newNonDbExistAuthors ?? Enumerable.Empty<string>())
                         book.BookAuthors.Add(new BookAuthor { Book = book, Author = new Author { FullName = author } });
                     #endregion Edit Authors of the inprocess book (Purpose: Add, insert or remove from «BookAuthors» table/entity)
 
@@ -223,9 +231,7 @@ namespace Mohkazv.Library.WebApp.Controllers
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
             var book = await _context.Books
                 .Include(b => b.DeweyDecimalClassification)
@@ -234,10 +240,9 @@ namespace Mohkazv.Library.WebApp.Controllers
                 .Include(b => b.Type)
                 .Include(b => b.BookAuthors).ThenInclude(ba => ba.Author)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (book == null)
-            {
                 return NotFound();
-            }
 
             return View(book);
         }
@@ -247,6 +252,9 @@ namespace Mohkazv.Library.WebApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var book = await _context.Books.FindAsync(id);
+
+            if (book == null)
+                return NotFound();
 
             _ifileManager.DeleteFile(book.CoverPath);
 

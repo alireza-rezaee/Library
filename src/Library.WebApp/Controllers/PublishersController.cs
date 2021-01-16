@@ -16,21 +16,15 @@ namespace Mohkazv.Library.WebApp.Controllers
         private readonly ApplicationDbContext _context;
 
         public PublishersController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+            => _context = context;
 
         [HttpGet("")]
         public async Task<IActionResult> Index()
-        {
-            return View(await _context.Publishers.ToListAsync());
-        }
+            => View(await _context.Publishers.ToListAsync());
 
         [HttpGet("create")]
         public IActionResult Create()
-        {
-            return View();
-        }
+            => View();
 
         // POST: Publishers/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -52,15 +46,13 @@ namespace Mohkazv.Library.WebApp.Controllers
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
             var publisher = await _context.Publishers.FindAsync(id);
+
             if (publisher == null)
-            {
                 return NotFound();
-            }
+
             return View(publisher);
         }
 
@@ -69,50 +61,37 @@ namespace Mohkazv.Library.WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("edit/{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title")] Publisher publisher)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title")] Publisher publisherModel)
         {
-            if (id != publisher.Id)
-            {
+            if (id != publisherModel.Id)
                 return NotFound();
-            }
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(publisher);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PublisherExists(publisher.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                var publisher = await _context.Publishers.FindAsync(id);
+
+                if (publisher == null)
+                    return NotFound();
+
+                _context.Update(publisher);
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
-            return View(publisher);
+            return View(publisherModel);
         }
 
         [HttpGet("delete/{id}")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
             var publisher = await _context.Publishers
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (publisher == null)
-            {
                 return NotFound();
-            }
 
             return View(publisher);
         }
@@ -123,14 +102,16 @@ namespace Mohkazv.Library.WebApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var publisher = await _context.Publishers.FindAsync(id);
+
+            if (publisher == null)
+                return NotFound();
+
             _context.Publishers.Remove(publisher);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool PublisherExists(int id)
-        {
-            return _context.Publishers.Any(e => e.Id == id);
-        }
+            => _context.Publishers.Any(e => e.Id == id);
     }
 }
