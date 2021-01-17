@@ -18,31 +18,24 @@
         <div class="form-floating mb-3">
             <input asp-for="Isbn" class="form-control" placeholder="@Html.DisplayNameFor(model => model.Isbn)" disabled>
             <label asp-for="Isbn"></label>
-            <span asp-validation-for="Isbn" class="text-danger"></span>
         </div>
     </div>
     <div class="col-12 col-md-6">
         <div class="form-floating mb-3">
-            <select asp-for="PublisherId" class="form-control" asp-items="ViewBag.PublisherId" disabled>
-                <option disabled selected>انتخاب کنید...</option>
-            </select>
-            <label asp-for="PublisherId"></label>
+            <input asp-for="Publisher.Title" class="form-control" placeholder="@Html.DisplayNameFor(model => model.Publisher.Title)" disabled>
+            <label asp-for="Publisher.Title"></label>
         </div>
     </div>
     <div class="col-12 col-md-6">
         <div class="form-floating mb-3">
-            <select asp-for="DdcId" class="form-control" asp-items="ViewBag.DdcId" disabled>
-                <option disabled selected>انتخاب کنید...</option>
-            </select>
-            <label asp-for="DdcId"></label>
+            <input asp-for="DeweyDecimalClassification.Title" class="form-control" placeholder="@Html.DisplayNameFor(model => model.DeweyDecimalClassification.Title)" disabled>
+            <label asp-for="DeweyDecimalClassification.Title"></label>
         </div>
     </div>
     <div class="col-12 col-md-6">
         <div class="form-floating mb-3">
-            <select asp-for="LanguageId" class="form-control" asp-items="ViewBag.LanguageId" placeholder="@Html.DisplayNameFor(model => model.Language)" disabled>
-                <option disabled selected>انتخاب کنید...</option>
-            </select>
-            <label asp-for="LanguageId"></label>
+            <input asp-for="Language.Name" class="form-control" placeholder="@Html.DisplayNameFor(model => model.Language.Name)" disabled>
+            <label asp-for="Language.Name"></label>
         </div>
     </div>
     <div class="col-12 my-3">
@@ -100,7 +93,6 @@
         <div class="form-floating mb-3">
             <textarea class="form-control" asp-for="Description" style="height: 100px" placeholder="توضیحاتی بنویسید..." disabled></textarea>
             <label asp-for="Description"></label>
-            <span asp-validation-for="Description" class="text-danger"></span>
         </div>
     </div>
     <div class="mb-2">
