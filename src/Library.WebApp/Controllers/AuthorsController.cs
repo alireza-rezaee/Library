@@ -28,7 +28,7 @@ namespace Mohkazv.Library.WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName")] Author author)
+        public async Task<IActionResult> Create([Bind("Id,FullName")] Author author)
         {
             if (ModelState.IsValid)
             {
@@ -58,7 +58,7 @@ namespace Mohkazv.Library.WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName")] Author modelAuthor)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FullName")] Author modelAuthor)
         {
             if (id != modelAuthor.Id)
                 return NotFound();

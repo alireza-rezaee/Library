@@ -47,6 +47,30 @@
     <None Update="Data\SqlQueries\20210111175829_InsertDefaultLanguages\InsertDefaultLanguages_Up.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Data\SqlQueries\20210117094234_InsertDefaultPublishers\InsertDefaultPublishers_Down.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\SqlQueries\20210117094234_InsertDefaultPublishers\InsertDefaultPublishers_Up.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\SqlQueries\20210117085838_InsertDefaultAuthors\InsertDefaultAuthors_Down.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\SqlQueries\20210117085838_InsertDefaultAuthors\InsertDefaultAuthors_Up.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\SqlQueries\20210117094313_InsertDefaultBooks\InsertDefaultBooks_Down.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\SqlQueries\20210117094313_InsertDefaultBooks\InsertDefaultBooks_Up.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\SqlQueries\20210117094325_InsertDefaultBookAuthors\InsertDefaultBookAuthors_Down.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\SqlQueries\20210117094325_InsertDefaultBookAuthors\InsertDefaultBookAuthors_Up.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

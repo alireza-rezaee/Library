@@ -35,7 +35,7 @@ namespace Mohkazv.Library.WebApp.Models
 
         [Display(Name = "رده‌بندی دیوئی")]
         [ForeignKey(nameof(DeweyDecimalClassification))]
-        public int DdcId { get; set; }
+        public int? DdcId { get; set; }
 
         #region Relationships
         [Display(Name = "زبان")]
