@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Mohkazv.Library.WebApp.Data;
 using Mohkazv.Library.WebApp.Models;
+using Mohkazv.Library.WebApp.Models.ViewModels.Authors;
 
 namespace Mohkazv.Library.WebApp.Controllers
 {
@@ -18,7 +19,12 @@ namespace Mohkazv.Library.WebApp.Controllers
         public AuthorsController(ApplicationDbContext context) => _context = context;
 
         [HttpGet("")]
-        public async Task<IActionResult> Index() => View(await _context.Authors.ToListAsync());
+        public async Task<IActionResult> Index()
+            => View(await _context.Authors
+                .Include(a => a.BookAuthors)
+                .ThenInclude(a => a.Author)
+                .Select(a => new IndexViewModel { AuthorId = a.Id, AuthorName = a.FullName, BookCounts = a.BookAuthors.Count })
+                .ToListAsync());
 
         [HttpGet("create")]
         public IActionResult Create() => View();

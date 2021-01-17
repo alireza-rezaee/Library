@@ -1,5 +1,5 @@
 ﻿@using Mohkazv.Library.WebApp.Extensions
-@model IEnumerable<Mohkazv.Library.WebApp.Models.Author>
+@model IEnumerable<Mohkazv.Library.WebApp.Models.ViewModels.Authors.IndexViewModel>
 
 @{
     ViewData["Title"] = "فهرست نویسندگان";
@@ -23,7 +23,10 @@
                 <tr>
                     <th style="width: 35px;">ردیف</th>
                     <th>
-                        @Html.DisplayNameFor(model => model.FullName)
+                        نام نویسنده
+                    </th>
+                    <th>
+                        تعداد آثار
                     </th>
                     <th>
                         عملیات‌ها
@@ -36,16 +39,19 @@
                     @for (var i = 0; i < count; i++)
                     {
                         var item = Model.ElementAt(i);
-                        <tr>
+                        <tr @if (Model.ElementAt(i).BookCounts == 0) { <text>class="table-warning"</text> }>
                             <td class="text-center" style="width: 35px;">@((i+1).EnglishToPersian())</td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.FullName)
+                                @Html.DisplayFor(modelItem => item.AuthorName)
                             </td>
                             <td>
-                                <a asp-controller="Authors" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-success lh-1" style="font-size:0 !important;">
+                                @((Model.ElementAt(i).BookCounts).EnglishToPersian())
+                            </td>
+                            <td>
+                                <a asp-controller="Authors" asp-action="Edit" asp-route-id="@item.AuthorId" class="btn btn-sm btn-success lh-1" style="font-size:0 !important;">
                                     <i class="bi bi-pen fs-6"></i>
                                 </a>
-                                <a asp-controller="Authors" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger lh-1" style="font-size:0 !important;">
+                                <a asp-controller="Authors" asp-action="Delete" asp-route-id="@item.AuthorId" class="btn btn-sm btn-danger lh-1" style="font-size:0 !important;">
                                     <i class="bi bi-trash fs-6"></i>
                                 </a>
                             </td>
